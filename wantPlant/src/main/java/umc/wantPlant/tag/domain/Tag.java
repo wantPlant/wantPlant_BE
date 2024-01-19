@@ -1,13 +1,7 @@
 package umc.wantPlant.tag.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -21,8 +15,32 @@ public class Tag {
 
     private LocalDateTime startDate;
 
-    private String tagColor;
+    @Enumerated(EnumType.STRING)
+    private TagColor tagColor;
 
     @NonNull
     private String tagName;
+
+    @Builder
+    public Tag(TagColor tagColor, @NonNull String tagName, LocalDateTime startDate) {
+        this.tagColor = tagColor;
+        this.tagName = tagName;
+        this.startDate = startDate;
+    }
+
+    public int[] getDate(){
+        int year = startDate.getYear();
+        int month = startDate.getMonthValue();
+        int day = startDate.getDayOfMonth();
+
+        return new int[]{year, month, day};
+    }
+
+    public int[] getTime(){
+        int hour = startDate.getHour();
+        int minute = startDate.getMinute();
+        int second = startDate.getSecond();
+
+        return new int[]{hour, minute, second};
+    }
 }
