@@ -14,8 +14,8 @@ public class GardenRequestDTO {
 
 		@NotBlank
 		private String description;
-		
+
 		@NotNull
-		private Long gardenCategory;
+		private Integer gardenCategory;
 	}
 }
