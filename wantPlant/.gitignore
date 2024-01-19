@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 *.yml
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -41,4 +42,4 @@ out/
 src/main/resources/*.yml
 
 ### logs ###
-logs/
+-logs/
