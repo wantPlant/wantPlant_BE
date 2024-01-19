@@ -7,7 +7,7 @@ import lombok.Getter;
 public class GardenRequestDTO {
 
 	@Getter
-	public static class CreatDTO {
+	public static class GardenCreatDTO {
 
 		@NotBlank
 		private String name;

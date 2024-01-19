@@ -10,7 +10,7 @@ public class GardenResponseDTO {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class CreatResultDTO {
+	public static class GardenCreatResultDTO {
 		Long gardenId;
 	}
 }
