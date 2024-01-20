@@ -41,4 +41,11 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 				.category(gardenCategories)
 				.build());
 	}
+
+	@Override
+	@Transactional
+	public Garden updateGarden(GardenRequestDTO.UpdateGardenDTO update) {
+
+		return null;
+	}
 }

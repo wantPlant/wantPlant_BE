@@ -15,7 +15,17 @@ public class GardenRequestDTO {
 		@NotBlank
 		private String description;
 
+		// TODO: String으로 정원카테고리 바꾸기
 		@NotNull
 		private Integer gardenCategory;
+	}
+
+	@Getter
+	public static class UpdateGardenDTO {
+		@NotBlank
+		private String name;
+
+		@NotBlank
+		private String description;
 	}
 }
