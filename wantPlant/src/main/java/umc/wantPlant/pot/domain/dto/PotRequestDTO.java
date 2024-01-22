@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PotRequestDTO {
     @Getter
@@ -11,7 +12,7 @@ public class PotRequestDTO {
         Long gardenId;
         String potName;
         String potType;
-        String proceed;
+        LocalDate startAt;
     }
 
     //화분 생성
@@ -30,19 +31,19 @@ public class PotRequestDTO {
         Long gardenId;
         String potName;
         String potType;
-        GoalsDTO goalList;
+        List<GoalsDTO> goalList;
     }
     @Getter
     public static class GoalsDTO{
         String goalTitle;
-        TodosDTO todoList;
+        List<TodosDTO> todoList;
     }
     @Getter
     public static class TodosDTO{
         String todoTitle;
         LocalDate startAt;
-        LocalDateTime startTime;
-        LocalDateTime endTime;
+        String startTime;
+        String endTime;
     }
 
     //화분 수정
