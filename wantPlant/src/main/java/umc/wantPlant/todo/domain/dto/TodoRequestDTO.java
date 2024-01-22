@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -18,13 +19,10 @@ public class TodoRequestDTO {
     @RequiredArgsConstructor
     public static class TodoCreateDTO {
         private String title;
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private LocalDate date;
-        @JsonFormat(pattern = "HH:mm")
-        private LocalTime startTime;
-        @JsonFormat(pattern = "HH:mm")
-        private LocalTime endTime;
-        @ColumnDefault("false")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime startTime;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime endTime;
         private Boolean isComplete;
     }
 

@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -18,15 +19,13 @@ public class Todo {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     @ColumnDefault("false")
     private Boolean isComplete;
 
-    public void updateTodoDetail(String title, LocalDate date, LocalTime startTime, LocalTime endTime, Boolean isComplete) {
+    public void updateTodoDetail(String title,LocalDateTime startTime, LocalDateTime endTime, Boolean isComplete) {
         this.title = title;
-        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.isComplete = isComplete;

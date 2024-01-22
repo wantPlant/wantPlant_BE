@@ -8,6 +8,7 @@ import umc.wantPlant.todo.domain.Todo;
 import umc.wantPlant.todo.domain.dto.TodoRequestDTO;
 import umc.wantPlant.todo.repository.TodoRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,14 +20,15 @@ public class TodoService {
 
     public Todo addTodo(TodoRequestDTO.TodoCreateDTO createDTO){
         String title = createDTO.getTitle();
-        LocalDate date = createDTO.getDate();
-        LocalTime startTime = createDTO.getStartTime();
-        LocalTime endTime = createDTO.getEndTime();
+        LocalDateTime startTime = LocalDateTime.from(createDTO.getStartTime());
+        LocalDateTime endTime = LocalDateTime.from(createDTO.getEndTime());
+        Boolean isComplete = false;
+
         return todoRepository.save(Todo.builder()
                 .title(title)
-                .date(date)
                 .startTime(startTime)
                 .endTime(endTime)
+                .isComplete(isComplete)
                 .build());
     }
 
@@ -38,16 +40,12 @@ public class TodoService {
         Todo todo = getTodoById(todoId);
 
         String newTitle = todoCreateDTO.getTitle();
-        LocalDate newDate = todoCreateDTO.getDate();
-        LocalTime newStartTime = todoCreateDTO.getStartTime();
-        LocalTime newEndTime = todoCreateDTO.getEndTime();
+        LocalDateTime newStartTime = LocalDateTime.from(todoCreateDTO.getStartTime());
+        LocalDateTime newEndTime = LocalDateTime.from(todoCreateDTO.getEndTime());
         Boolean newisComplete = todoCreateDTO.getIsComplete();
 
         if(newTitle == null){
             newTitle = todo.getTitle();
-        }
-        if(newDate == null){
-            newDate = todo.getDate();
         }
         if(newStartTime == null){
             newStartTime = todo.getStartTime();
@@ -60,7 +58,7 @@ public class TodoService {
         }
 
 
-        todo.updateTodoDetail(newTitle, newDate, newStartTime, newEndTime,newisComplete);
+        todo.updateTodoDetail(newTitle,newStartTime, newEndTime,newisComplete);
         todoRepository.save(todo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
