@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="45277d4a-49af-4a55-9ffa-fef8c25e5a15" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/apiPayload/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/apiPayload/code/BaseCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/apiPayload/code/BaseErrorCode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/apiPayload/code/ErrorReasonDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/apiPayload/code/ReasonDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/apiPayload/code/status/ErrorStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/apiPayload/code/status/SuccessStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/application/PotCommandService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/application/PotQueryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/domain/enums/PotTagColor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/repository/PotRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/ui/PotController.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/wantPlant">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2bBTKNk9KjX16NXSuNvnxb2zT8v" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "feature/pot",
+    "last_opened_file_path": "C:/Users/HyeonjiKim/Documents/GitHub/UMC/wantPlant_BE",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\HyeonjiKim\Documents\GitHub\UMC\wantPlant_BE\wantPlant\src\main\java" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="umc.wantPlant.pot.apiPayload.code" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="umc.wantPlant.pot.domain.enums" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="WantPlantApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="wantPlant.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="umc.wantPlant.WantPlantApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="45277d4a-49af-4a55-9ffa-fef8c25e5a15" name="Changes" comment="" />
+      <created>1705687408332</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1705687408332</updated>
+      <workItem from="1705687409363" duration="2145000" />
+      <workItem from="1705689567884" duration="5121000" />
+      <workItem from="1705694718711" duration="6388000" />
+      <workItem from="1705839827392" duration="17000" />
+      <workItem from="1705843823859" duration="4003000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/wantPlant/src/main/java/umc/wantPlant/pot/apiPayload/ApiResponse.java</url>
+          <line>12</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
