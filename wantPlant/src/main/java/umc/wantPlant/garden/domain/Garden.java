@@ -33,4 +33,5 @@ public class Garden {
 
 	@Enumerated(EnumType.STRING)
 	private GardenCategories category;
+
 }
