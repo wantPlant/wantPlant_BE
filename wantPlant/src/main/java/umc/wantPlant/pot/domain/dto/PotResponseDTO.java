@@ -28,6 +28,7 @@ public class PotResponseDTO {
     public static class GetPotNamesResultDTO{
         List<PotNameDTO> potNames;
     }
+    @Builder
     public static class PotNameDTO{
         Long potId;
         String potName;
@@ -41,6 +42,7 @@ public class PotResponseDTO {
     public static class GetPotImagesResultDTO{
         List<PotImageDTO> potImages;
     }
+    @Builder
     public static class PotImageDTO{
         Long potId;
         String potImageUrl;
@@ -53,13 +55,19 @@ public class PotResponseDTO {
     @AllArgsConstructor
     public static class GetPotsResultDTO{
         List<PotDTO> pots;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
     }
+    @Builder
     public static class PotDTO{
         Long potId;
         String potName;
-        LocalDate startAt;
         int proceed;
         String potImageUrl;
+        LocalDate startAt;
     }
 
     //웹: 날짜별 화분&todos 조회
@@ -108,8 +116,9 @@ public class PotResponseDTO {
     public static class GetCompletedPotsResultDTO{
         List<PotCompleteDTO> pots;
     }
+    @Builder
     public static class PotCompleteDTO{
-        String potTitle;
+        String potName;
         String potImageUrl;
         LocalDate startAt;
         LocalDate completeAt;

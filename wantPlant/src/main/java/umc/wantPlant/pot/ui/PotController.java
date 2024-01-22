@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import umc.wantPlant.apipayload.ApiResponse;
 import umc.wantPlant.pot.application.PotCommandService;
 import umc.wantPlant.pot.application.PotQueryService;
+import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
 import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 
@@ -19,8 +20,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @RequestMapping("/api/pots")
 public class PotController {
-//    private final PotQueryService potQueryService;
-//    private final PotCommandService potCommandService;
+    private final PotCommandService potCommandService;
+    private final PotQueryService potQueryService;
 
     @PostMapping("")
     @Operation(summary = "화분 생성 API", description = "화분을 생성하는 API입니다.")
@@ -28,7 +29,9 @@ public class PotController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
     public ApiResponse<String> postPot(@RequestBody PotRequestDTO.PostPotDTO request){
-        return null;
+        Pot newPot = potCommandService.createPot(request);
+
+        return ApiResponse.onSuccess(newPot.getPotId()+"번 화분이 정상적으로 생성되었습니다.");
     }
 
     @PostMapping("/goals/todos")
@@ -48,7 +51,8 @@ public class PotController {
     @Parameter(name = "gardenId", description = "Query String으로 정원 ID를 주세요")
     public ApiResponse<PotResponseDTO.GetPotNamesResultDTO> getPotNames(
             @RequestParam(name = "gardenId") Long gardenId){
-        return null;
+
+        return ApiResponse.onSuccess(potQueryService.getPotNamesByGardenId(gardenId));
     }
 
     @GetMapping("/images")
@@ -59,7 +63,7 @@ public class PotController {
     @Parameter(name = "gardenId", description = "Query String으로 정원 ID를 주세요")
     public ApiResponse<PotResponseDTO.GetPotImagesResultDTO> getPotImages(
             @RequestParam(name = "gardenId") Long gardenId){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getPotImagesByGardenId(gardenId));
     }
 
     @GetMapping("")
@@ -74,7 +78,7 @@ public class PotController {
     public ApiResponse<PotResponseDTO.GetPotsResultDTO> getPots(
             @RequestParam(name = "gardenId") Long gardenId,
             @RequestParam(name = "page") int page){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getPotsByGardenId(gardenId, page-1));
     }
 
     @GetMapping("/todos/date")
@@ -97,7 +101,7 @@ public class PotController {
     @Parameter(name = "potId", description = "PathVariable로 potId를 주세요")
     public ApiResponse<PotResponseDTO.GetPotDetailResultDTO> getPotDetail(
             @PathVariable(name = "potId")Long potId){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getPotDetailByPotId(potId));
     }
 
     @GetMapping ("/completed")
@@ -109,7 +113,7 @@ public class PotController {
     public ApiResponse<PotResponseDTO.GetCompletedPotsResultDTO> getCompletedPots(
             @RequestParam(name = "gardenId") Long gardenId
     ){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getCompletedPotsByGardenId(gardenId));
     }
 
     @PatchMapping("/{potId}")

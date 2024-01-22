@@ -14,7 +14,14 @@ public enum ErrorStatus implements BaseErrorCode {
 	_BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "잘못된 요청입니다."),
 	_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
 	_FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
-	TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트");
+	TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트")
+
+	//정원
+	,GARDEN_NOT_FOUND(HttpStatus.NOT_FOUND, "GARDEN4001", "정원을 찾을 수 없습니다")
+
+	//화분
+	,POT_NOT_FOUND(HttpStatus.NOT_FOUND, "POT4001", "화분을 찾을 수 없습니다.")
+	;
 
 	private final HttpStatus httpStatus;
 
