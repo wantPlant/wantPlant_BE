@@ -21,6 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
 	//화분
 	,POT_NOT_FOUND(HttpStatus.NOT_FOUND, "POT4001", "화분을 찾을 수 없습니다.")
+	,POT_DELETE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "POT4002", "화분을 삭제할 수 없습니다.")
 	;
 
 	private final HttpStatus httpStatus;

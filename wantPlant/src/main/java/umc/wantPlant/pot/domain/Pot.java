@@ -42,4 +42,8 @@ public class Pot {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "garden_id")
     private Garden garden;
+
+    public void setPotName(String potName){
+        this.potName = potName;
+    }
 }
