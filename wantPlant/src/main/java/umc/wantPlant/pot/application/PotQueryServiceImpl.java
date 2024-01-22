@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import umc.wantPlant.apipayload.code.status.ErrorStatus;
 import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
 import umc.wantPlant.apipayload.exceptions.handler.PotHandler;
@@ -24,6 +25,7 @@ public class PotQueryServiceImpl implements PotQueryService{
     private final GardenQueryService gardenQueryService;
 
     @Override
+    @Transactional
     public PotResponseDTO.GetPotNamesResultDTO getPotNamesByGardenId(Long gardenId) {
         List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
@@ -44,6 +46,7 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override
+    @Transactional
     public PotResponseDTO.GetPotImagesResultDTO getPotImagesByGardenId(Long gardenId) {
         List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND))
@@ -62,6 +65,7 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override
+    @Transactional
     public PotResponseDTO.GetPotsResultDTO getPotsByGardenId(Long gardenId, int page) {
         Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
@@ -88,6 +92,7 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override
+    @Transactional
     public PotResponseDTO.GetCategoryPotTodoPerDateDTO getCategoryPotTodoByDate(LocalDate date) {
         List<Pot> pots = potRepository.findAllByStartAt(date).orElseThrow(
                 ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
@@ -96,6 +101,7 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override //pot 상세조회
+    @Transactional
     public PotResponseDTO.GetPotDetailResultDTO getPotDetailByPotId(Long potId) {
         Pot pot = potRepository.findById(potId).orElseThrow(
                 ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
@@ -111,6 +117,7 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override
+    @Transactional
     public PotResponseDTO.GetCompletedPotsResultDTO getCompletedPotsByGardenId(Long gardenId) {
         List<Pot> pots = potRepository.findAllCompletePotsByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)

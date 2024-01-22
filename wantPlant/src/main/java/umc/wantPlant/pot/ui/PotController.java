@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 import umc.wantPlant.apipayload.ApiResponse;
+import umc.wantPlant.apipayload.code.status.ErrorStatus;
+import umc.wantPlant.apipayload.exceptions.GeneralException;
+import umc.wantPlant.apipayload.exceptions.handler.PotHandler;
 import umc.wantPlant.pot.application.PotCommandService;
 import umc.wantPlant.pot.application.PotQueryService;
 import umc.wantPlant.pot.domain.Pot;
@@ -127,7 +130,8 @@ public class PotController {
     public ApiResponse<String> patchPot(
             @PathVariable(name = "potId") Long potId,
             @RequestBody PotRequestDTO.PatchPotDTO request){
-        return null;
+        Pot pot = potCommandService.modifyPot(potId, request);
+        return ApiResponse.onSuccess(pot.getPotId()+"번 화분이 정상적으로 수정되었습니다.");
     }
 
     @DeleteMapping("/{potId}")
@@ -137,6 +141,12 @@ public class PotController {
     })
     @Parameter(name = "potId", description = "Path Variable로 potId를 주세요")
     public ApiResponse<String> deletePot(@PathVariable(name = "potId") Long potId){
-        return null;
+        try {
+            potCommandService.deletePot(potId);
+        }catch(GeneralException e){
+            throw new PotHandler(ErrorStatus.POT_DELETE_BAD_REQUEST);
+        }
+
+        return ApiResponse.onSuccess(potId+" 화분이 정상적으로 삭제되었습니다.");
     }
 }

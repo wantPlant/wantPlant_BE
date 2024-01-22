@@ -2,9 +2,11 @@ package umc.wantPlant.pot.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import umc.wantPlant.apipayload.code.status.ErrorStatus;
 import umc.wantPlant.apipayload.exceptions.GeneralException;
 import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
+import umc.wantPlant.apipayload.exceptions.handler.PotHandler;
 import umc.wantPlant.garden.application.GardenQueryService;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.repository.GardenRepository;
@@ -38,5 +40,20 @@ public class PotCommandServiceImpl implements PotCommandService{
                 .build();
 
         return potRepository.save(newPot);
+    }
+
+    @Override
+    public Pot modifyPot(Long potId, PotRequestDTO.PatchPotDTO request) {
+        Pot pot = potRepository.findById(potId).orElseThrow(
+                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
+        );
+        pot.setPotName(request.getPotName());
+        return potRepository.save(pot);
+    }
+
+    @Override
+    @Transactional
+    public void deletePot(Long potId) {
+        potRepository.deleteById(potId);
     }
 }

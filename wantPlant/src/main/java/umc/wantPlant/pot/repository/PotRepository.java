@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.pot.domain.Pot;
-import umc.wantPlant.tag.domain.Tag;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,4 +19,6 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
     Optional<Pot> findById(Long Id);
     @Query("select p from Pot p where Garden(p.garden) = :garden and CompleteAt(p.completeAt) != null")
     Optional<List<Pot>>findAllCompletePotsByGarden(@Param("garden")Garden garden);
+
+    void deleteById(Long potId);
 }

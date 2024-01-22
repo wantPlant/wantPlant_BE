@@ -5,4 +5,6 @@ import umc.wantPlant.pot.domain.dto.PotRequestDTO;
 
 public interface PotCommandService {
     public Pot createPot(PotRequestDTO.PostPotDTO request);
+    public Pot modifyPot(Long potId, PotRequestDTO.PatchPotDTO request);
+    public void deletePot(Long potId);
 }
