@@ -22,7 +22,7 @@ public class PotRequestDTO {
         String potName;
         String potType;
         String potTageColor;
-        String proceed;
+        LocalDate startAt;
     }
 
     //화분, goal, todos 생성
@@ -49,7 +49,7 @@ public class PotRequestDTO {
     //화분 수정
     @Getter
     public static class PatchPotDTO{
-        String potTitle;
+        String potName;
     }
 
 

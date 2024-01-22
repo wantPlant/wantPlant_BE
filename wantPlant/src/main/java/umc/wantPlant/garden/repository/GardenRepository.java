@@ -11,4 +11,6 @@ public interface GardenRepository extends JpaRepository<Garden, Long> {
 	Page<Garden> findAllGardensBy(PageRequest pageRequest);
 
 	Page<Garden> findByCategory(GardenCategories category, PageRequest pageRequest);
+
+
 }
