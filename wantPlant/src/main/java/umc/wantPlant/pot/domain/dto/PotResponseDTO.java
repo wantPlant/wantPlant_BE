@@ -72,15 +72,16 @@ public class PotResponseDTO {
     }
     public static class CategoryDTO{
         String category;
-        List<PotDTO> pots;
+        List<PotPerDateDTO> pots;
     }
-    public static class potDTO{
+    public static class PotPerDateDTO{
         Long potId;
         String potName;
         String potTagColor;
-        List<TodoDTO> todos;
+        List<TodoPerDateDTO> todos;
     }
-    public static class TodoDTO{
+
+    public static class TodoPerDateDTO{
         Long todoId;
         String todoTitle;
         boolean isComplete;

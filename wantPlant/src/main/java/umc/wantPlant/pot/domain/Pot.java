@@ -2,6 +2,7 @@ package umc.wantPlant.pot.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.pot.domain.enums.PotTagColor;
 import umc.wantPlant.pot.domain.enums.PotType;
 
@@ -38,7 +39,7 @@ public class Pot {
 
     private LocalDate completeAt;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "garden_id")
-//    private Garden garden;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "garden_id")
+    private Garden garden;
 }
