@@ -8,7 +8,7 @@ import umc.wantPlant.tag.domain.TagColor;
 import java.time.LocalDateTime;
 
 @Getter
-public class TagSaveRequestDto {
+public class TagRequestDto {
 
     private TagColor tagColor;
 

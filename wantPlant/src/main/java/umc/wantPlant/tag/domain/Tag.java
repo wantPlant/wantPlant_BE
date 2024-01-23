@@ -2,6 +2,7 @@ package umc.wantPlant.tag.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import umc.wantPlant.tag.domain.dto.request.TagUpdateRequestDto;
 
 import java.time.LocalDateTime;
 
@@ -22,25 +23,11 @@ public class Tag {
     private String tagName;
 
     @Builder
-    public Tag(TagColor tagColor, @NonNull String tagName, LocalDateTime startDate) {
+    public Tag(Long id, TagColor tagColor, @NonNull String tagName, LocalDateTime startDate) {
+        this.id = id;
         this.tagColor = tagColor;
         this.tagName = tagName;
         this.startDate = startDate;
     }
 
-    public int[] getDate(){
-        int year = startDate.getYear();
-        int month = startDate.getMonthValue();
-        int day = startDate.getDayOfMonth();
-
-        return new int[]{year, month, day};
-    }
-
-    public int[] getTime(){
-        int hour = startDate.getHour();
-        int minute = startDate.getMinute();
-        int second = startDate.getSecond();
-
-        return new int[]{hour, minute, second};
-    }
 }

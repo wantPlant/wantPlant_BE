@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import umc.wantPlant.tag.application.TagService;
-import umc.wantPlant.tag.domain.Tag;
-import umc.wantPlant.tag.domain.dto.request.TagSaveRequestDto;
+import umc.wantPlant.tag.domain.dto.request.TagRequestDto;
+import umc.wantPlant.tag.domain.dto.request.TagUpdateRequestDto;
 import umc.wantPlant.tag.domain.dto.response.TagResponseDto;
 
 import java.util.List;
@@ -22,8 +22,8 @@ public class TagController {
     @Operation(summary = "태그 생성 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),})
-    public TagResponseDto addTag(@RequestBody TagSaveRequestDto tagSaveRequestDto){
-        return tagService.addTag(tagSaveRequestDto);
+    public TagResponseDto addTag(@RequestBody TagRequestDto tagRequestDto){
+        return tagService.addTag(tagRequestDto);
     }
 
     @GetMapping("/{tagId}")
@@ -45,5 +45,17 @@ public class TagController {
             @RequestParam(value="month") int month,
             @RequestParam(value="day") int day){
         return tagService.getTagByDay(year, month, day);
+    }
+
+    @DeleteMapping("/{tagId}")
+    @Operation(summary = "특정 태그를 ID로 삭제")
+    public void deleteTag(@PathVariable Long tagId){
+        tagService.deleteTag(tagId);
+    }
+
+    @PutMapping("/update")
+    @Operation(summary = "특정 태그를 업데이트")
+    public TagResponseDto updateTag(@RequestBody TagUpdateRequestDto tagUpdateRequestDto){
+        return tagService.updateTag(tagUpdateRequestDto);
     }
 }
