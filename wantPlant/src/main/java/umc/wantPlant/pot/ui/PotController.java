@@ -43,7 +43,8 @@ public class PotController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
     public ApiResponse<String> postPotGoalTodo(@RequestBody PotRequestDTO.PostPotGoalTodoDTO request){
-        return null;
+        Pot newPot = potCommandService.createPotGoalsTodos(request);
+        return ApiResponse.onSuccess(newPot.getPotId()+" 화분이 정상적으로 생성되었습니다.");
     }
 
     @GetMapping("/names")

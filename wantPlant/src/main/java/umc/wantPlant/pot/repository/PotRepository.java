@@ -17,7 +17,7 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
     Page<Pot> findAllByGarden(Garden garden, PageRequest page);
     Optional<List<Pot>> findAllByStartAt(LocalDate startAt);
     Optional<Pot> findById(Long Id);
-    @Query("select p from Pot p where Garden(p.garden) = :garden and CompleteAt(p.completeAt) != null")
+    @Query("select p from Pot p where p.garden = :garden and p.completeAt is not null")
     Optional<List<Pot>>findAllCompletePotsByGarden(@Param("garden")Garden garden);
 
     void deleteById(Long potId);
