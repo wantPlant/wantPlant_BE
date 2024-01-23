@@ -28,7 +28,7 @@ public class Pot {
     private int proceed;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "DEFAULT 'PURPLE'")
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'PURPLE'")
     private PotTagColor potTagColor;
 
     @Column(nullable = false)
