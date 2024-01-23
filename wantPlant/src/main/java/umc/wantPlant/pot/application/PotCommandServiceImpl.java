@@ -16,24 +16,31 @@ import umc.wantPlant.pot.domain.enums.PotTagColor;
 import umc.wantPlant.pot.domain.enums.PotType;
 import umc.wantPlant.pot.repository.PotRepository;
 
+
 @Service
 @RequiredArgsConstructor
 public class PotCommandServiceImpl implements PotCommandService{
     private final PotRepository potRepository;
     private final GardenQueryService gardenQueryService;
+//    private final AmazonS3 amazonS3; //todo 이미지 처리
+
 
     @Override
     public Pot createPot(PotRequestDTO.PostPotDTO request) {
+        String keyName = "potType/"+request.getPotType()+"-"+0;;
+        String potImgUrl = "";
+        //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
+
 
         Garden garden = gardenQueryService.getGardenById(request.getGardenId()).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
         );
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
-                .potType(PotType.valueOf(request.getPotType()))
+                .potType(request.getPotType())
                 .proceed(0)
-                .potTagColor(PotTagColor.valueOf(request.getPotTageColor()))
-                .potImageUrl("")
+                .potTagColor(request.getPotTageColor())
+                .potImageUrl(potImgUrl)
                 .startAt(request.getStartAt())
                 .completeAt(null)
                 .garden(garden)
@@ -41,6 +48,52 @@ public class PotCommandServiceImpl implements PotCommandService{
 
         return potRepository.save(newPot);
     }
+
+    @Override //앱용
+    public Pot createPotGoalsTodos(PotRequestDTO.PostPotGoalTodoDTO request) {
+        String keyName = "potType/"+request.getPotType()+"-"+0;;
+        String potImgUrl = "";
+        //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
+
+        Garden garden = gardenQueryService.getGardenById(request.getGardenId()).orElseThrow(
+                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
+        );
+
+        Pot newPot = Pot.builder()
+                .potName(request.getPotName())
+                .potType(request.getPotType())
+                .proceed(0)
+                .potTagColor(PotTagColor.PURPLE)
+                .potImageUrl(potImgUrl)
+                .startAt(request.getStartAt())
+                .completeAt(null)
+                .garden(garden)
+                .build();
+        potRepository.save(newPot);
+
+        //todo: goal, todo 합치면 주석 해제하기
+//        List<Goal> goals = request.getGoalList().stream().map(goal -> {
+//            Goal newGoal = Goal.builder()
+//                    .pot(newPot)
+//                    .goalTitle(goal.getGoalTitle())
+//                    .goalDescription(goal.getGoalDescription())
+//                    .build();
+//            List<Todo> todos = goal.getTodoList().stream().map(todo ->
+//                    Todo.builder()
+//                            .title(todo.getTodoTitle())
+//                            .content(todo.getContent())
+//                            .startAt(todo.getStartAt())
+//                            .isComplete(todo.getComlete())
+//                            .goal(newGoal)
+//                            .build()).toList();
+//            todoRepository.saveAll(todos);
+//            return newGoal;
+//        }).toList();
+//        goalRepository.saveAll(goals);
+//
+        return newPot;
+    }
+
 
     @Override
     public Pot modifyPot(Long potId, PotRequestDTO.PatchPotDTO request) {

@@ -28,7 +28,10 @@ public class PotResponseDTO {
     public static class GetPotNamesResultDTO{
         List<PotNameDTO> potNames;
     }
+    @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PotNameDTO{
         Long potId;
         String potName;
@@ -42,7 +45,10 @@ public class PotResponseDTO {
     public static class GetPotImagesResultDTO{
         List<PotImageDTO> potImages;
     }
+    @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PotImageDTO{
         Long potId;
         String potImageUrl;
@@ -61,7 +67,10 @@ public class PotResponseDTO {
         Boolean isFirst;
         Boolean isLast;
     }
+    @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PotDTO{
         Long potId;
         String potName;
@@ -78,22 +87,44 @@ public class PotResponseDTO {
     public static class GetCategoryPotTodoPerDateDTO{
         List<CategoryDTO> categories;
     }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CategoryDTO{
         String category;
-        List<PotPerDateDTO> pots;
+        List<TodoPerDateDTO> todos;
     }
-    public static class PotPerDateDTO{
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TodoPerDateDTO{
         Long potId;
         String potName;
         String potTagColor;
-        List<TodoPerDateDTO> todos;
-    }
-
-    public static class TodoPerDateDTO{
         Long todoId;
         String todoTitle;
         boolean isComplete;
     }
+//    @Builder
+//    public static class CategoryDTO{
+//        String category;
+//        List<PotPerDateDTO> pots;
+//    }
+//    @Builder
+//    public static class PotPerDateDTO{
+//        Long potId;
+//        String potName;
+//        String potTagColor;
+//        List<TodoPerDateDTO> todos;
+//    }
+//    @Builder
+//    public static class TodoPerDateDTO{
+//        Long todoId;
+//        String todoTitle;
+//        boolean isComplete;
+//    }
 
     //화분 상세 조회
     @Getter
@@ -116,7 +147,10 @@ public class PotResponseDTO {
     public static class GetCompletedPotsResultDTO{
         List<PotCompleteDTO> pots;
     }
+    @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PotCompleteDTO{
         String potName;
         String potImageUrl;

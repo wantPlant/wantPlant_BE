@@ -14,6 +14,7 @@ import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 import umc.wantPlant.pot.repository.PotRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,11 +93,29 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override
-    @Transactional
+    @Transactional //날짜 별 카테고리&화분&todos 리스트 조회
     public PotResponseDTO.GetCategoryPotTodoPerDateDTO getCategoryPotTodoByDate(LocalDate date) {
-        List<Pot> pots = potRepository.findAllByStartAt(date).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+
+//        List<Todo> todos = todoService.findAllByStartAt(date).get();
+//        todos.stream().map(todo->
+//                todo.getGoal().getPot().getCategory)
+//
+////        List<PotResponseDTO.PotPerDateDTO> potPerDateDTOS = PotResponseDTO.PotPerDateDTO.builder()
+////                .potId()
+////                .potName()
+////                .potTagColor()
+////                .todos()
+////                .build();
+////
+//        List<PotResponseDTO.CategoryDTO> categoryDTOS = PotResponseDTO.CategoryDTO.builder()
+//                .category()
+//                .todos(potPerDateDTOS)
+//                .build();
+//
+//        return PotResponseDTO.GetCategoryPotTodoPerDateDTO.builder()
+//                .categories()
+//                .build();
+
         return null;
     }
 
@@ -131,7 +150,7 @@ public class PotQueryServiceImpl implements PotQueryService{
                         .potImageUrl(pot.getPotImageUrl())
                         .startAt(pot.getStartAt())
                         .completeAt(pot.getCompleteAt())
-                        .build()).toList();
+                        .build()).collect(Collectors.toList());
 
         return PotResponseDTO.GetCompletedPotsResultDTO.builder()
                 .pots(potCompleteDTOS)
