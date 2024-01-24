@@ -40,7 +40,9 @@ public class TagService {
         tagRepository.delete(tagRepository.findById(tagId).orElseThrow());
     }
 
-    public TagResponseDto updateTag(TagUpdateRequestDto tagUpdateRequestDto) {
+    public TagResponseDto updateTag(TagUpdateRequestDto tagUpdateRequestDto) throws Exception {
+        tagRepository.findById(tagUpdateRequestDto.getTagId()).
+                orElseThrow(()->new Exception("일치하는 태그를 찾을 수 없습니다."));
         return TagResponseDto.of(tagRepository.save(tagUpdateRequestDto.toEntity()));
     }
 }
