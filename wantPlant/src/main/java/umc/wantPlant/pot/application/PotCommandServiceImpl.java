@@ -10,11 +10,14 @@ import umc.wantPlant.apipayload.exceptions.handler.PotHandler;
 import umc.wantPlant.garden.application.GardenQueryService;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.repository.GardenRepository;
+import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
 import umc.wantPlant.pot.domain.enums.PotTagColor;
 import umc.wantPlant.pot.domain.enums.PotType;
 import umc.wantPlant.pot.repository.PotRepository;
+
+import java.util.List;
 
 
 @Service
@@ -26,6 +29,7 @@ public class PotCommandServiceImpl implements PotCommandService{
 
 
     @Override
+    @Transactional
     public Pot createPot(PotRequestDTO.PostPotDTO request) {
         String keyName = "potType/"+request.getPotType()+"-"+0;;
         String potImgUrl = "";
@@ -96,6 +100,7 @@ public class PotCommandServiceImpl implements PotCommandService{
 
 
     @Override
+    @Transactional
     public Pot modifyPot(Long potId, PotRequestDTO.PatchPotDTO request) {
         Pot pot = potRepository.findById(potId).orElseThrow(
                 ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
@@ -107,6 +112,13 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override
     @Transactional
     public void deletePot(Long potId) {
+        //todo: todo 랑 합치고 주석 해제
+        //goals, todos도 같이 삭제해주기
+//        Pot pot = potRepository.findById(potId).get();
+//        List<Goal> goals = goalQueryService.findAllByPot(pot);
+//        goalCommandService.deleteAllByPot(pot);
+//        todoCommandService.deleteAllByGoals(goals);
+
         potRepository.deleteById(potId);
     }
 }

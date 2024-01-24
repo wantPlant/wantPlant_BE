@@ -26,7 +26,6 @@ public class PotQueryServiceImpl implements PotQueryService{
     private final GardenQueryService gardenQueryService;
 
     @Override
-    @Transactional
     public PotResponseDTO.GetPotNamesResultDTO getPotNamesByGardenId(Long gardenId) {
         List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
@@ -47,7 +46,6 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override
-    @Transactional
     public PotResponseDTO.GetPotImagesResultDTO getPotImagesByGardenId(Long gardenId) {
         List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND))
@@ -66,7 +64,6 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override
-    @Transactional
     public PotResponseDTO.GetPotsResultDTO getPotsByGardenId(Long gardenId, int page) {
         Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
@@ -92,8 +89,7 @@ public class PotQueryServiceImpl implements PotQueryService{
                 .build();
     }
 
-    @Override
-    @Transactional //날짜 별 카테고리&화분&todos 리스트 조회
+    @Override//날짜 별 카테고리&화분&todos 리스트 조회
     public PotResponseDTO.GetCategoryPotTodoPerDateDTO getCategoryPotTodoByDate(LocalDate date) {
 
 //        List<Todo> todos = todoService.findAllByStartAt(date).get();
@@ -120,7 +116,6 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override //pot 상세조회
-    @Transactional
     public PotResponseDTO.GetPotDetailResultDTO getPotDetailByPotId(Long potId) {
         Pot pot = potRepository.findById(potId).orElseThrow(
                 ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
@@ -136,7 +131,6 @@ public class PotQueryServiceImpl implements PotQueryService{
     }
 
     @Override
-    @Transactional
     public PotResponseDTO.GetCompletedPotsResultDTO getCompletedPotsByGardenId(Long gardenId) {
         List<Pot> pots = potRepository.findAllCompletePotsByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
