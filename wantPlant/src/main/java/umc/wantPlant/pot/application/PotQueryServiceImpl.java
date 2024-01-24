@@ -9,9 +9,12 @@ import umc.wantPlant.apipayload.code.status.ErrorStatus;
 import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
 import umc.wantPlant.apipayload.exceptions.handler.PotHandler;
 import umc.wantPlant.garden.application.GardenQueryService;
+import umc.wantPlant.garden.domain.enums.GardenCategories;
 import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 import umc.wantPlant.pot.repository.PotRepository;
+import umc.wantPlant.todo.application.TodoService;
+import umc.wantPlant.todo.domain.Todo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 public class PotQueryServiceImpl implements PotQueryService{
     private final PotRepository potRepository;
     private final GardenQueryService gardenQueryService;
+    private final TodoService todoService;
 
     @Override
     public PotResponseDTO.GetPotNamesResultDTO getPotNamesByGardenId(Long gardenId) {
@@ -92,27 +96,25 @@ public class PotQueryServiceImpl implements PotQueryService{
     @Override//날짜 별 카테고리&화분&todos 리스트 조회
     public PotResponseDTO.GetCategoryPotTodoPerDateDTO getCategoryPotTodoByDate(LocalDate date) {
 
-//        List<Todo> todos = todoService.findAllByStartAt(date).get();
-//        todos.stream().map(todo->
-//                todo.getGoal().getPot().getCategory)
-//
-////        List<PotResponseDTO.PotPerDateDTO> potPerDateDTOS = PotResponseDTO.PotPerDateDTO.builder()
-////                .potId()
-////                .potName()
-////                .potTagColor()
-////                .todos()
-////                .build();
-////
-//        List<PotResponseDTO.CategoryDTO> categoryDTOS = PotResponseDTO.CategoryDTO.builder()
-//                .category()
-//                .todos(potPerDateDTOS)
-//                .build();
-//
-//        return PotResponseDTO.GetCategoryPotTodoPerDateDTO.builder()
-//                .categories()
-//                .build();
+        List<Todo> todos = todoService.getTodosByStartDate(date);
 
-        return null;
+        List<PotResponseDTO.TodoPerDateDTO> todoPerDateDTOS = todos.stream().map(todo ->
+        {
+            Pot pot = todo.getGoal().getPot();
+            return PotResponseDTO.TodoPerDateDTO.builder()
+                    .category(pot.getGarden().getCategory())
+                    .potId(pot.getPotId())
+                    .potName(pot.getPotName())
+                    .potTagColor(pot.getPotTagColor())
+                    .todoId(todo.getId())
+                    .todoTitle(todo.getTitle())
+                    .isComplete(todo.getIsComplete())
+                    .build();
+        }).collect(Collectors.toList());
+
+        return PotResponseDTO.GetCategoryPotTodoPerDateDTO.builder()
+                .todos(todoPerDateDTOS)
+                .build();
     }
 
     @Override //pot 상세조회
@@ -149,5 +151,11 @@ public class PotQueryServiceImpl implements PotQueryService{
         return PotResponseDTO.GetCompletedPotsResultDTO.builder()
                 .pots(potCompleteDTOS)
                 .build();
+    }
+
+    @Override
+    public Pot getPotByPotId(Long potId) {
+
+        return potRepository.findById(potId).get();
     }
 }

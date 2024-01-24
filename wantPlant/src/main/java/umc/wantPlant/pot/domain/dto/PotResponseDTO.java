@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.wantPlant.garden.domain.enums.GardenCategories;
+import umc.wantPlant.pot.domain.enums.PotTagColor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -85,24 +87,18 @@ public class PotResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetCategoryPotTodoPerDateDTO{
-        List<CategoryDTO> categories;
-    }
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class CategoryDTO{
-        String category;
         List<TodoPerDateDTO> todos;
     }
+
     @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TodoPerDateDTO{
+        GardenCategories category;
         Long potId;
         String potName;
-        String potTagColor;
+        PotTagColor potTagColor;
         Long todoId;
         String todoTitle;
         boolean isComplete;

@@ -3,6 +3,7 @@ package umc.wantPlant.goal.domain.dto;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class GoalRequestDTO {
@@ -16,9 +17,12 @@ public class GoalRequestDTO {
     public static class PostGoalTodoDTO{
         Long potId;
         String goalTitle;
+        TodoDTO todo;
+    }
+    @Getter
+    public static class TodoDTO{
         String todoTitle;
-        LocalDate startAt;
-        LocalTime startTime;
+        LocalDateTime startAt;
     }
 
     @Getter

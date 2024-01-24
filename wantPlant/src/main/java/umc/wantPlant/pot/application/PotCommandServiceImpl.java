@@ -10,12 +10,17 @@ import umc.wantPlant.apipayload.exceptions.handler.PotHandler;
 import umc.wantPlant.garden.application.GardenQueryService;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.repository.GardenRepository;
+import umc.wantPlant.goal.application.GoalCommandService;
+import umc.wantPlant.goal.application.GoalQueryService;
 import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
 import umc.wantPlant.pot.domain.enums.PotTagColor;
 import umc.wantPlant.pot.domain.enums.PotType;
 import umc.wantPlant.pot.repository.PotRepository;
+import umc.wantPlant.todo.application.TodoService;
+import umc.wantPlant.todo.domain.Todo;
+import umc.wantPlant.todo.repository.TodoRepository;
 
 import java.util.List;
 
@@ -25,6 +30,10 @@ import java.util.List;
 public class PotCommandServiceImpl implements PotCommandService{
     private final PotRepository potRepository;
     private final GardenQueryService gardenQueryService;
+    private final GoalCommandService goalCommandService;
+    private final GoalQueryService goalQueryService;
+    private final TodoService todoService;
+
 //    private final AmazonS3 amazonS3; //todo 이미지 처리
 
 
@@ -75,26 +84,9 @@ public class PotCommandServiceImpl implements PotCommandService{
                 .build();
         potRepository.save(newPot);
 
-        //todo: goal, todo 합치면 주석 해제하기
-//        List<Goal> goals = request.getGoalList().stream().map(goal -> {
-//            Goal newGoal = Goal.builder()
-//                    .pot(newPot)
-//                    .goalTitle(goal.getGoalTitle())
-//                    .goalDescription(goal.getGoalDescription())
-//                    .build();
-//            List<Todo> todos = goal.getTodoList().stream().map(todo ->
-//                    Todo.builder()
-//                            .title(todo.getTodoTitle())
-//                            .content(todo.getContent())
-//                            .startAt(todo.getStartAt())
-//                            .isComplete(todo.getComlete())
-//                            .goal(newGoal)
-//                            .build()).toList();
-//            todoRepository.saveAll(todos);
-//            return newGoal;
-//        }).toList();
-//        goalRepository.saveAll(goals);
-//
+        //goals&todos생성
+        goalCommandService.createGoalsTodos(newPot, request.getGoalList());
+
         return newPot;
     }
 
@@ -112,12 +104,14 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override
     @Transactional
     public void deletePot(Long potId) {
-        //todo: todo 랑 합치고 주석 해제
-        //goals, todos도 같이 삭제해주기
-//        Pot pot = potRepository.findById(potId).get();
-//        List<Goal> goals = goalQueryService.findAllByPot(pot);
-//        goalCommandService.deleteAllByPot(pot);
-//        todoCommandService.deleteAllByGoals(goals);
+        //goals 삭제
+        Pot pot = potRepository.findById(potId).get();
+        goalCommandService.deleteAllByPot(pot);
+        //todos 삭제
+        List<Goal> goals = goalQueryService.findAllByPot(pot);
+        for(Goal goal:goals){
+            todoService.deleteTodosByGoal(goal);
+        }
 
         potRepository.deleteById(potId);
     }

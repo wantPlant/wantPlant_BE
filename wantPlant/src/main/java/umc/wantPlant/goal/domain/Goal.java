@@ -20,4 +20,8 @@ public class Goal {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pot_id")
     private Pot pot;
+
+    public void setGoalTitle(String goalTitle){
+        this.goalTitle =goalTitle;
+    }
 }

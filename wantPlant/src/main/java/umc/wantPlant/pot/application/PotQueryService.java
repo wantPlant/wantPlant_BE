@@ -1,5 +1,6 @@
 package umc.wantPlant.pot.application;
 
+import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 
 import java.time.LocalDate;
@@ -12,4 +13,6 @@ public interface PotQueryService {
     public PotResponseDTO.GetCategoryPotTodoPerDateDTO getCategoryPotTodoByDate(LocalDate date);
     public PotResponseDTO.GetPotDetailResultDTO getPotDetailByPotId(Long potId);
     public PotResponseDTO.GetCompletedPotsResultDTO getCompletedPotsByGardenId(Long gardenId);
+
+    public Pot getPotByPotId(Long potId);
 }

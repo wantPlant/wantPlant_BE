@@ -90,11 +90,11 @@ public class PotController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
-    @Parameter(name = "date", description = "Query String으로 date를 주세요")
+    @Parameter(name = "date", description = "Query String으로 date(yyyy-mm-dd)를 주세요")
     public ApiResponse<PotResponseDTO.GetCategoryPotTodoPerDateDTO> getCategoryPotTodoPerDate(
             @RequestParam(name = "date") LocalDate date
     ){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getCategoryPotTodoByDate(date));
     }
 
     @GetMapping("/{potId}")

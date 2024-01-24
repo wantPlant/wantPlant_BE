@@ -40,19 +40,17 @@ public class PotRequestDTO {
         @NotNull(message = "유효하지 않은 화분 타입이 입력되었습니다.")
         PotType potType;
         LocalDate startAt;
-        List<GoalsDTO> goalList;
+        List<GoalDTO> goalList;
     }
     @Getter
-    public static class GoalsDTO{
+    public static class GoalDTO{
         String goalTitle;
-        List<TodosDTO> todoList;
+        List<TodoDTO> todoList;
     }
     @Getter
-    public static class TodosDTO{
+    public static class TodoDTO{
         String todoTitle;
-        LocalDate startAt;
-        String startTime;
-        String endTime;
+        LocalDateTime startAt;
     }
 
     //화분 수정
