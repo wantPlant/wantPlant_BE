@@ -1,14 +1,11 @@
 package umc.wantPlant.todo.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 
 @Entity
 @Getter
@@ -23,15 +20,18 @@ public class Todo {
     @ColumnDefault("false")
     private Boolean isComplete;
 
-    public void updateTodoDetail(String title,LocalDateTime startTime, Boolean isComplete) {
+    public void updateTodoDetail(String title,LocalDateTime startTime) {
         this.title = title;
         this.startTime = startTime;
-        this.isComplete = isComplete;
     }
 
-//    public void updateTodoCheck(Boolean isComplete){
-//        this.isComplete = isComplete;
-//    }
+    public void updateTodoTitle(String title){this.title = title;}
+    public void updateTodoTime(LocalDateTime startTime){
+        this.startTime = startTime;
+    }
+    public void updateTodoComplete(Boolean isComplete){
+        this.isComplete = isComplete;
+    }
 
 //    @ManyToOne
 //    @JoinColumn(name="GOAL_ID")
