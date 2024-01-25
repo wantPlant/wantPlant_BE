@@ -32,7 +32,7 @@ public class GoalCommandServiceImpl implements GoalCommandService{
     }
 
     @Override
-    @Transactional
+    @Transactional //pot 생성에서 사용
     public void createGoalsTodos(Pot pot, List<PotRequestDTO.GoalDTO> request){
         List<Goal> goals = request.stream().map(goalDTO ->
                 {
@@ -51,6 +51,7 @@ public class GoalCommandServiceImpl implements GoalCommandService{
     }
 
     @Override
+    @Transactional
     public Goal createGoalTodo(GoalRequestDTO.PostGoalTodoDTO request) {
         Goal newGoal = Goal.builder()
                 .goalTitle(request.getGoalTitle())
@@ -69,7 +70,7 @@ public class GoalCommandServiceImpl implements GoalCommandService{
         return goalRepository.save(goal);
     }
 
-    @Override
+    @Override //gaol지우면서 todo같이 지우기
     public void deleteGoal(Long goalId) {
         Goal goal = goalRepository.findById(goalId).get();
         todoService.deleteTodosByGoal(goal);

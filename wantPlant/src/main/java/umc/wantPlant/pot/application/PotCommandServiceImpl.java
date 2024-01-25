@@ -68,6 +68,7 @@ public class PotCommandServiceImpl implements PotCommandService{
         String potImgUrl = "";
         //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
 
+
         Garden garden = gardenQueryService.getGardenById(request.getGardenId()).orElseThrow(
                 ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
         );
@@ -104,14 +105,15 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override
     @Transactional
     public void deletePot(Long potId) {
-        //goals 삭제
-        Pot pot = potRepository.findById(potId).get();
-        goalCommandService.deleteAllByPot(pot);
         //todos 삭제
+        Pot pot = potRepository.findById(potId).get();
         List<Goal> goals = goalQueryService.findAllByPot(pot);
         for(Goal goal:goals){
             todoService.deleteTodosByGoal(goal);
         }
+        //goals 삭제
+        goalCommandService.deleteAllByPot(pot);
+
 
         potRepository.deleteById(potId);
     }

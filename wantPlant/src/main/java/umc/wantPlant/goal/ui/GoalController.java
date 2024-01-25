@@ -60,7 +60,7 @@ public class GoalController {
         return ApiResponse.onSuccess(goal.getGoalId()+"번 목표 수정 완료");
     }
 
-    @DeleteMapping("{goalId}")
+    @DeleteMapping("/{goalId}")
     @Operation(summary = "목표 삭제 API", description = "목표와 하위 todo들을 삭제하는 API입니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
