@@ -8,8 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 import umc.wantPlant.apipayload.ApiResponse;
+import umc.wantPlant.apipayload.code.status.ErrorStatus;
+import umc.wantPlant.apipayload.exceptions.GeneralException;
+import umc.wantPlant.apipayload.exceptions.handler.PotHandler;
 import umc.wantPlant.pot.application.PotCommandService;
 import umc.wantPlant.pot.application.PotQueryService;
+import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
 import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 
@@ -19,8 +23,8 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @RequestMapping("/api/pots")
 public class PotController {
-//    private final PotQueryService potQueryService;
-//    private final PotCommandService potCommandService;
+    private final PotCommandService potCommandService;
+    private final PotQueryService potQueryService;
 
     @PostMapping("")
     @Operation(summary = "화분 생성 API", description = "화분을 생성하는 API입니다.")
@@ -28,7 +32,9 @@ public class PotController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
     public ApiResponse<String> postPot(@RequestBody PotRequestDTO.PostPotDTO request){
-        return null;
+        Pot newPot = potCommandService.createPot(request);
+
+        return ApiResponse.onSuccess(newPot.getPotId()+"번 화분이 정상적으로 생성되었습니다.");
     }
 
     @PostMapping("/goals/todos")
@@ -37,7 +43,8 @@ public class PotController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
     public ApiResponse<String> postPotGoalTodo(@RequestBody PotRequestDTO.PostPotGoalTodoDTO request){
-        return null;
+        Pot newPot = potCommandService.createPotGoalsTodos(request);
+        return ApiResponse.onSuccess(newPot.getPotId()+" 화분이 정상적으로 생성되었습니다.");
     }
 
     @GetMapping("/names")
@@ -48,7 +55,8 @@ public class PotController {
     @Parameter(name = "gardenId", description = "Query String으로 정원 ID를 주세요")
     public ApiResponse<PotResponseDTO.GetPotNamesResultDTO> getPotNames(
             @RequestParam(name = "gardenId") Long gardenId){
-        return null;
+
+        return ApiResponse.onSuccess(potQueryService.getPotNamesByGardenId(gardenId));
     }
 
     @GetMapping("/images")
@@ -59,7 +67,7 @@ public class PotController {
     @Parameter(name = "gardenId", description = "Query String으로 정원 ID를 주세요")
     public ApiResponse<PotResponseDTO.GetPotImagesResultDTO> getPotImages(
             @RequestParam(name = "gardenId") Long gardenId){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getPotImagesByGardenId(gardenId));
     }
 
     @GetMapping("")
@@ -74,7 +82,7 @@ public class PotController {
     public ApiResponse<PotResponseDTO.GetPotsResultDTO> getPots(
             @RequestParam(name = "gardenId") Long gardenId,
             @RequestParam(name = "page") int page){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getPotsByGardenId(gardenId, page-1));
     }
 
     @GetMapping("/todos/date")
@@ -82,11 +90,11 @@ public class PotController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
-    @Parameter(name = "date", description = "Query String으로 date를 주세요")
+    @Parameter(name = "date", description = "Query String으로 date(yyyy-mm-dd)를 주세요")
     public ApiResponse<PotResponseDTO.GetCategoryPotTodoPerDateDTO> getCategoryPotTodoPerDate(
             @RequestParam(name = "date") LocalDate date
     ){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getCategoryPotTodoByDate(date));
     }
 
     @GetMapping("/{potId}")
@@ -97,7 +105,7 @@ public class PotController {
     @Parameter(name = "potId", description = "PathVariable로 potId를 주세요")
     public ApiResponse<PotResponseDTO.GetPotDetailResultDTO> getPotDetail(
             @PathVariable(name = "potId")Long potId){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getPotDetailByPotId(potId));
     }
 
     @GetMapping ("/completed")
@@ -109,7 +117,7 @@ public class PotController {
     public ApiResponse<PotResponseDTO.GetCompletedPotsResultDTO> getCompletedPots(
             @RequestParam(name = "gardenId") Long gardenId
     ){
-        return null;
+        return ApiResponse.onSuccess(potQueryService.getCompletedPotsByGardenId(gardenId));
     }
 
     @PatchMapping("/{potId}")
@@ -123,7 +131,8 @@ public class PotController {
     public ApiResponse<String> patchPot(
             @PathVariable(name = "potId") Long potId,
             @RequestBody PotRequestDTO.PatchPotDTO request){
-        return null;
+        Pot pot = potCommandService.modifyPot(potId, request);
+        return ApiResponse.onSuccess(pot.getPotId()+"번 화분이 정상적으로 수정되었습니다.");
     }
 
     @DeleteMapping("/{potId}")
@@ -133,6 +142,12 @@ public class PotController {
     })
     @Parameter(name = "potId", description = "Path Variable로 potId를 주세요")
     public ApiResponse<String> deletePot(@PathVariable(name = "potId") Long potId){
-        return null;
+        try {
+            potCommandService.deletePot(potId);
+        }catch(GeneralException e){
+            throw new PotHandler(ErrorStatus.POT_DELETE_BAD_REQUEST);
+        }
+
+        return ApiResponse.onSuccess(potId+" 화분이 정상적으로 삭제되었습니다.");
     }
 }

@@ -28,7 +28,7 @@ public class Pot {
     private int proceed;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "DEFAULT 'PURPLE'")
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'PURPLE'")
     private PotTagColor potTagColor;
 
     @Column(nullable = false)
@@ -42,4 +42,8 @@ public class Pot {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "garden_id")
     private Garden garden;
+
+    public void setPotName(String potName){
+        this.potName = potName;
+    }
 }
