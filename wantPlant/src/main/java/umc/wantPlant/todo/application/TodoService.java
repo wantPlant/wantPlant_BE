@@ -10,8 +10,8 @@ import umc.wantPlant.goal.domain.dto.GoalRequestDTO;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
 import umc.wantPlant.todo.domain.Todo;
 import umc.wantPlant.todo.domain.dto.TodoRequestDTO;
+import umc.wantPlant.todo.domain.dto.TodoResponseDTO;
 import umc.wantPlant.todo.repository.TodoRepository;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,7 +25,7 @@ public class TodoService {
 
     public Todo addTodo(TodoRequestDTO.TodoCreateDTO createDTO){
         String title = createDTO.getTitle();
-        LocalDateTime startTime = LocalDateTime.from(createDTO.getStartTime());
+        LocalDateTime startTime = createDTO.getStartTime();
         Boolean isComplete = false;
 
         return todoRepository.save(Todo.builder()
@@ -35,7 +35,15 @@ public class TodoService {
                 .build());
     }
 
-    public List<Todo> getTodoList() {return todoRepository.findAll();}
+    public List<TodoResponseDTO> getTodos() {
+        List<Todo> todos = todoRepository.findAll();
+        return todos.stream()
+                .map(TodoResponseDTO::of)
+                .collect(Collectors.toList());
+    }
+    public TodoResponseDTO getTodo(Long todoId) {
+        return TodoResponseDTO.of(todoRepository.findById(todoId).orElseThrow());
+    }
 
     public Todo getTodoById(Long todoId){return todoRepository.findById(todoId).orElseThrow();}
 
@@ -44,23 +52,42 @@ public class TodoService {
 
         String newTitle = todoCreateDTO.getTitle();
         LocalDateTime newStartTime = LocalDateTime.from(todoCreateDTO.getStartTime());
-        Boolean newisComplete = todoCreateDTO.getIsComplete();
 
-        if(newTitle == null){
-            newTitle = todo.getTitle();
-        }
-        if(newStartTime == null){
-            newStartTime = todo.getStartTime();
-        }
-        if(newisComplete == null){
-            newisComplete = todo.getIsComplete();
-        }
-
-
-        todo.updateTodoDetail(newTitle,newStartTime,newisComplete);
+        todo.updateTodoDetail(newTitle,newStartTime);
         todoRepository.save(todo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    public ResponseEntity<Void> updateTodoTitle(Long todoId, TodoRequestDTO.TodoUpdateTitleDTO updateTodoTitleDTO){
+        Todo todo = getTodoById(todoId);
+
+        String newTitle = updateTodoTitleDTO.getTitle();
+
+        todo.updateTodoTitle(newTitle);
+        todoRepository.save(todo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Void> updateTodostartTime(Long todoId, TodoRequestDTO.TodoUpdateTimeDTO updateTodoTimeDTO){
+        Todo todo = getTodoById(todoId);
+
+        LocalDateTime newStartTime = updateTodoTimeDTO.getStartTime();
+
+        todo.updateTodoTime(newStartTime);
+        todoRepository.save(todo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public ResponseEntity<Void> updateTodoComplete(Long todoId, TodoRequestDTO.TodoUpdateCompleteDTO updateCompleteDTO){
+        Todo todo = getTodoById(todoId);
+
+        Boolean newIsComplete = updateCompleteDTO.getIsComplete();
+
+        todo.updateTodoComplete(newIsComplete);
+        todoRepository.save(todo);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     public void deleteTodo(Long todoId){
         Todo todo = getTodoById(todoId);
