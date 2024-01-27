@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.domain.dto.GardenRequestDTO;
@@ -20,10 +21,11 @@ import umc.wantPlant.garden.repository.GardenRepository;
 public class GardenCommandServiceImpl implements GardenCommandService {
 
 	private final GardenRepository gardenRepository;
+	private final EntityManager em;    //엔티티매니저 주입
 
 	@Override
 	@Transactional
-	public GardenResponseDTO.GardenResultDTO creat(GardenRequestDTO.GardenCreatDTO creat) {
+	public GardenResponseDTO.GardenCreatResultDTO creat(GardenRequestDTO.GardenCreatDTO creat) {
 
 		GardenCategories gardenCategories = null;
 
@@ -46,7 +48,7 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 				.category(gardenCategories)
 				.build());
 
-		return GardenResponseDTO.GardenResultDTO
+		return GardenResponseDTO.GardenCreatResultDTO
 			.builder()
 			.gardenId(newGarden.getId())
 			.gardenCategory(creat.getCategory())
@@ -55,44 +57,44 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 
 	@Override
 	@Transactional
-	public GardenResponseDTO.GardenResultDTO update(Garden garden, GardenRequestDTO.UpdateGardenDTO update) {
-		gardenRepository.save(
-			garden.builder()
-				.name(update.getName())
-				.description(update.getDescription())
-				.build()
-		);
-		return GardenResponseDTO.GardenResultDTO
-			.builder()
+	public GardenResponseDTO.GardenUpdateResultDTO update(Long gardenId, GardenRequestDTO.UpdateGardenDTO update) {
+		Garden garden = em.find(Garden.class, gardenId);
+		garden.setName(update.getName());
+		garden.setDescription(update.getDescription());
+
+		return GardenResponseDTO.GardenUpdateResultDTO.builder()
 			.gardenId(garden.getId())
+			.name(garden.getName())
+			.gardenCategory(garden.getCategory().toString())
+			.description(garden.getDescription())
 			.build();
 	}
 
 	@Override
 	@Transactional
-	public GardenResponseDTO.GardenResultDTO updateName(Garden garden, String name) {
-		gardenRepository.save(
-			garden.builder()
-				.name(name)
-				.build()
-		);
-		return GardenResponseDTO.GardenResultDTO
-			.builder()
+	public GardenResponseDTO.GardenUpdateResultDTO updateName(Long gardenId, String name) {
+		Garden garden = em.find(Garden.class, gardenId);
+		garden.setName(name);
+
+		return GardenResponseDTO.GardenUpdateResultDTO.builder()
 			.gardenId(garden.getId())
+			.name(garden.getName())
+			.gardenCategory(garden.getCategory().toString())
+			.description(garden.getDescription())
 			.build();
 	}
 
 	@Override
 	@Transactional
-	public GardenResponseDTO.GardenResultDTO updateDescription(Garden garden, String description) {
-		gardenRepository.save(
-			garden.builder()
-				.name(description)
-				.build()
-		);
-		return GardenResponseDTO.GardenResultDTO
-			.builder()
+	public GardenResponseDTO.GardenUpdateResultDTO updateDescription(Long gardenId, String description) {
+		Garden garden = em.find(Garden.class, gardenId);
+		garden.setDescription(description);
+
+		return GardenResponseDTO.GardenUpdateResultDTO.builder()
 			.gardenId(garden.getId())
+			.name(garden.getName())
+			.gardenCategory(garden.getCategory().toString())
+			.description(garden.getDescription())
 			.build();
 	}
 
@@ -103,22 +105,24 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	}
 
 	@Override
-	public GardenResponseDTO.GardenDTO toGardenDTO(Garden garden) {
+	public GardenResponseDTO.GardenResultDTO toGardenResultDTO(Garden garden) {
 		String category = garden.getCategory().toString();
-		return GardenResponseDTO.GardenDTO
+
+		return GardenResponseDTO.GardenResultDTO
 			.builder()
 			.gardenId(garden.getId())
 			.name(garden.getName())
 			.description(garden.getDescription())
 			.gardenCategory(category)
+			.potList(gardenRepository.findPotByGardenId(garden))
 			.build();
 	}
 
 	@Override
 	public GardenResponseDTO.GardenListDTO getGardenList(Page<Garden> gardenPage) {
 
-		List<GardenResponseDTO.GardenDTO> gardenDTOList = gardenPage.stream()
-			.map(this::toGardenDTO)
+		List<GardenResponseDTO.GardenResultDTO> gardenDTOList = gardenPage.stream()
+			.map(this::toGardenResultDTO)
 			.collect(Collectors.toList());
 
 		return GardenResponseDTO.GardenListDTO.builder()
