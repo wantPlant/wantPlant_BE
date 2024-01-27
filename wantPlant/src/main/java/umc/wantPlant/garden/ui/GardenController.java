@@ -38,9 +38,9 @@ public class GardenController {
 	@Operation(summary = "정원 생성 API", description = "정원을 생성하는 API입니다." + "리퀘스트 바디로 이름,설명,카테고리이름을 주세요")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공")})
-	public ApiResponse<GardenResponseDTO.GardenResultDTO> creat(@RequestBody GardenRequestDTO.GardenCreatDTO request) {
+	public ApiResponse<GardenResponseDTO.GardenCreatResultDTO> creat(@RequestBody GardenRequestDTO.GardenCreatDTO request) {
 
-		GardenResponseDTO.GardenResultDTO result = gardenCommandService.creat(request);
+		GardenResponseDTO.GardenCreatResultDTO result = gardenCommandService.creat(request);
 
 		return ApiResponse.onSuccess(result);
 	}
@@ -51,12 +51,11 @@ public class GardenController {
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공")})
 	@Parameters({@Parameter(name = "gardenId", description = "정원ID를 주세요, path variable 입니다!")})
-	public ApiResponse<GardenResponseDTO.GardenResultDTO> updateGarden(@PathVariable Long gardenId,
+	public ApiResponse<GardenResponseDTO.GardenUpdateResultDTO> updateGarden(@PathVariable Long gardenId,
 		@RequestBody GardenRequestDTO.UpdateGardenDTO update) {
 
-		Garden garden = gardenQueryService.getGardenById(gardenId).orElseThrow();
 
-		GardenResponseDTO.GardenResultDTO result = gardenCommandService.update(garden, update);
+		GardenResponseDTO.GardenUpdateResultDTO result = gardenCommandService.update(gardenId, update);
 
 		return ApiResponse.onSuccess(result);
 	}
@@ -66,11 +65,10 @@ public class GardenController {
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공")})
 	@Parameters({@Parameter(name = "gardenId", description = "정원 id를 주세요, path variable 입니다!")})
-	public ApiResponse<GardenResponseDTO.GardenResultDTO> updateGardenName(@PathVariable Long gardenId,
+	public ApiResponse<GardenResponseDTO.GardenUpdateResultDTO> updateGardenName(@PathVariable Long gardenId,
 		@RequestParam String name) {
 
-		Garden garden = gardenQueryService.getGardenById(gardenId).orElseThrow();
-		GardenResponseDTO.GardenResultDTO result = gardenCommandService.updateName(garden, name);
+		GardenResponseDTO.GardenUpdateResultDTO result = gardenCommandService.updateName(gardenId, name);
 
 		return ApiResponse.onSuccess(result);
 	}
@@ -80,11 +78,10 @@ public class GardenController {
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공")})
 	@Parameters({@Parameter(name = "gardenId", description = "정원 id를 주세요, path variable 입니다!")})
-	public ApiResponse<GardenResponseDTO.GardenResultDTO> updateGardenDescription(@PathVariable Long gardenId,
+	public ApiResponse<GardenResponseDTO.GardenUpdateResultDTO> updateGardenDescription(@PathVariable Long gardenId,
 		@RequestParam String description) {
 
-		Garden garden = gardenQueryService.getGardenById(gardenId).orElseThrow();
-		GardenResponseDTO.GardenResultDTO result = gardenCommandService.updateDescription(garden, description);
+		GardenResponseDTO.GardenUpdateResultDTO result = gardenCommandService.updateDescription(gardenId, description);
 
 		return ApiResponse.onSuccess(result);
 	}
