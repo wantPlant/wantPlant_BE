@@ -25,8 +25,6 @@ public class PotRequestDTO {
     public static class PostPotDTO{
         Long gardenId;
         String potName;
-        @NotNull(message = "유효하지 않은 화분 타입이 입력되었습니다.")
-        PotType potType;
         @NotNull(message = "유효하지 않은 화분 태그 컬러가 입력되었습니다.")
         PotTagColor potTageColor;
         LocalDate startAt;
@@ -37,8 +35,6 @@ public class PotRequestDTO {
     public static class PostPotGoalTodoDTO{
         Long gardenId;
         String potName;
-        @NotNull(message = "유효하지 않은 화분 타입이 입력되었습니다.")
-        PotType potType;
         LocalDate startAt;
         List<GoalDTO> goalList;
     }

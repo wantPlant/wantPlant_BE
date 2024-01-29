@@ -108,8 +108,8 @@ public class PotController {
         return ApiResponse.onSuccess(potQueryService.getPotDetailByPotId(potId));
     }
 
-    @GetMapping ("/completed")
-    @Operation(summary = "완료한 화분 리스트 조회 API", description = "완료한 화분 리스트를 조회하는 API입니다. 도감에 사용하시면 됩니다.")
+    @GetMapping ("/completed/app")
+    @Operation(summary = "[앱] 완료한 화분 리스트 조회 API", description = "완료한 화분 리스트를 조회하는 API입니다. 도감에 사용하시면 됩니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
@@ -118,6 +118,15 @@ public class PotController {
             @RequestParam(name = "gardenId") Long gardenId
     ){
         return ApiResponse.onSuccess(potQueryService.getCompletedPotsByGardenId(gardenId));
+    }
+
+    @GetMapping ("/completed/web")
+    @Operation(summary = "[웹] 완료한 화분 리스트 조회 API", description = "완료한 화분 리스트를 조회하는 API입니다. 도감에 사용하시면 됩니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
+    })
+    public ApiResponse<PotResponseDTO.GetCompletedPotsForWebResultDTO> getCompletedPotsForWeb(){
+        return ApiResponse.onSuccess(potQueryService.getCompletedPotsForWeb());
     }
 
     @PatchMapping("/{potId}")

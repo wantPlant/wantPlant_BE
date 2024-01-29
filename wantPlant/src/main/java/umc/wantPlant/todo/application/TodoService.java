@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.goal.domain.dto.GoalRequestDTO;
+import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
+import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 import umc.wantPlant.todo.domain.Todo;
 import umc.wantPlant.todo.domain.dto.TodoRequestDTO;
 import umc.wantPlant.todo.domain.dto.TodoResponseDTO;
@@ -127,6 +129,14 @@ public class TodoService {
         LocalDateTime startDateMinTime = startDate.atStartOfDay();
         LocalDateTime startDateMaxTime = startDate.atTime(LocalTime.MAX);
         return todoRepository.findAllByStartDate(startDateMinTime, startDateMaxTime).get();
+    }
+    //potService에서 요청
+    //처음 생성된 두개 투두 조회
+    public List<PotResponseDTO.TodoDTO> getFirstTwoTodo(Pot pot){
+        return todoRepository.findFirstTwoTodoByPot(pot.getPotId()).get().stream().map(todoTitle ->
+                PotResponseDTO.TodoDTO.builder()
+                        .todoTitle(todoTitle)
+                        .build()).collect(Collectors.toList());
     }
     //goal로 하위 todos지우기
     public void deleteTodosByGoal(Goal goal){

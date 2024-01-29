@@ -103,24 +103,7 @@ public class PotResponseDTO {
         String todoTitle;
         boolean isComplete;
     }
-//    @Builder
-//    public static class CategoryDTO{
-//        String category;
-//        List<PotPerDateDTO> pots;
-//    }
-//    @Builder
-//    public static class PotPerDateDTO{
-//        Long potId;
-//        String potName;
-//        String potTagColor;
-//        List<TodoPerDateDTO> todos;
-//    }
-//    @Builder
-//    public static class TodoPerDateDTO{
-//        Long todoId;
-//        String todoTitle;
-//        boolean isComplete;
-//    }
+
 
     //화분 상세 조회
     @Getter
@@ -135,23 +118,51 @@ public class PotResponseDTO {
         String potImageUrl;
     }
 
-    //완료한 화분 리스트 조회
+    //앱 : 완료한 화분 리스트 조회
     @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetCompletedPotsResultDTO{
-        List<PotCompleteDTO> pots;
+        List<CompletedPotDTO> pots;
     }
     @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PotCompleteDTO{
+    public static class CompletedPotDTO{
         String potName;
         String potImageUrl;
         LocalDate startAt;
         LocalDate completeAt;
     }
 
+    //웹 : 완료한 화분 리스트 조회
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetCompletedPotsForWebResultDTO{
+        List<CompletedPotForWebDTO> pots;
+    }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CompletedPotForWebDTO{
+        GardenCategories gardenCategory;
+        String potName;
+        String GardenName;
+        LocalDate startAt;
+        LocalDate completedAt;
+        String potImgUrl;
+        List<TodoDTO> todos;
+    }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TodoDTO{
+        String todoTitle;
+    }
 }

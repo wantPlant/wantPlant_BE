@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import umc.wantPlant.goal.domain.Goal;
+import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.todo.domain.Todo;
 
 import java.time.LocalDate;
@@ -20,4 +21,11 @@ public interface TodoRepository extends JpaRepository <Todo,Long>{
     @Query("select t from Todo t where t.startTime >= :minTime and t.startTime <= :maxTime")
     Optional<List<Todo>> findAllByStartDate(@Param("minTime")LocalDateTime startDateMinTime
             , @Param("maxTime")LocalDateTime startDateMaxTime);
+
+    @Query("select t.title from Todo t left join Goal g on t.goal.goalId = g.goalId" +
+            "         left join Pot p on p.potId = g.pot.potId" +
+            "         where p.potId = :potId" +
+            "         order by t.startTime" +
+            "         limit 2")
+    Optional<List<String>> findFirstTwoTodoByPot(@Param("potId") Long potId);
 }

@@ -40,7 +40,8 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override
     @Transactional
     public Pot createPot(PotRequestDTO.PostPotDTO request) {
-        String keyName = "potType/"+request.getPotType()+"-"+0;;
+        PotType potType = PotType.getRandom();
+        String keyName = "potType/"+potType+"-"+0;;
         String potImgUrl = "";
         //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
 
@@ -50,7 +51,7 @@ public class PotCommandServiceImpl implements PotCommandService{
         );
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
-                .potType(request.getPotType())
+                .potType(potType)
                 .proceed(0)
                 .potTagColor(request.getPotTageColor())
                 .potImageUrl(potImgUrl)
@@ -64,7 +65,8 @@ public class PotCommandServiceImpl implements PotCommandService{
 
     @Override //앱용
     public Pot createPotGoalsTodos(PotRequestDTO.PostPotGoalTodoDTO request) {
-        String keyName = "potType/"+request.getPotType()+"-"+0;;
+        PotType potType = PotType.getRandom();
+        String keyName = "potType/"+potType+"-"+0;;
         String potImgUrl = "";
         //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
 
@@ -75,7 +77,7 @@ public class PotCommandServiceImpl implements PotCommandService{
 
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
-                .potType(request.getPotType())
+                .potType(potType)
                 .proceed(0)
                 .potTagColor(PotTagColor.PURPLE)
                 .potImageUrl(potImgUrl)
@@ -115,6 +117,6 @@ public class PotCommandServiceImpl implements PotCommandService{
         goalCommandService.deleteAllByPot(pot);
 
 
-        potRepository.deleteById(potId);
+        potRepository.deleteByPotId(potId);
     }
 }
