@@ -2,12 +2,17 @@ package umc.wantPlant.todo.application;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.goal.domain.dto.GoalRequestDTO;
+import umc.wantPlant.pot.application.PotCommandService;
+import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
+import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 import umc.wantPlant.todo.domain.Todo;
 import umc.wantPlant.todo.domain.dto.TodoRequestDTO;
 import umc.wantPlant.todo.domain.dto.TodoResponseDTO;
@@ -22,6 +27,12 @@ import java.util.stream.Collectors;
 @Service
 public class TodoService {
     private final TodoRepository todoRepository;
+    private PotCommandService potCommandService;
+
+    @Autowired //순환참조때문에 setter로 주입 ->
+    public void setPotCommandService(@Lazy PotCommandService potCommandService){
+        this.potCommandService = potCommandService;
+    }
 
     public Todo addTodo(TodoRequestDTO.TodoCreateDTO createDTO){
         String title = createDTO.getTitle();
@@ -78,6 +89,7 @@ public class TodoService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Transactional
     public ResponseEntity<Void> updateTodoComplete(Long todoId, TodoRequestDTO.TodoUpdateCompleteDTO updateCompleteDTO){
         Todo todo = getTodoById(todoId);
 
@@ -85,6 +97,7 @@ public class TodoService {
 
         todo.updateTodoComplete(newIsComplete);
         todoRepository.save(todo);
+        potCommandService.updatePot(todo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -127,6 +140,14 @@ public class TodoService {
         LocalDateTime startDateMinTime = startDate.atStartOfDay();
         LocalDateTime startDateMaxTime = startDate.atTime(LocalTime.MAX);
         return todoRepository.findAllByStartDate(startDateMinTime, startDateMaxTime).get();
+    }
+    //potService에서 요청
+    //처음 생성된 두개 투두 조회
+    public List<PotResponseDTO.TodoDTO> getFirstTwoTodo(Pot pot){
+        return todoRepository.findFirstTwoTodoByPot(pot.getPotId()).get().stream().map(todoTitle ->
+                PotResponseDTO.TodoDTO.builder()
+                        .todoTitle(todoTitle)
+                        .build()).collect(Collectors.toList());
     }
     //goal로 하위 todos지우기
     public void deleteTodosByGoal(Goal goal){

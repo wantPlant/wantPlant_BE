@@ -46,4 +46,17 @@ public class Pot {
     public void setPotName(String potName){
         this.potName = potName;
     }
+    public void updatePotProceed(boolean todoIsComplete){
+        if(todoIsComplete){
+            this.proceed +=1;
+        }else{
+            this.proceed -=1;
+        }
+    }
+    public void setPotImgUrl(String imgUrl){
+        this.potImageUrl = imgUrl;
+    }
+    public void setCompleteAt(LocalDate date){
+        this.completeAt = date;
+    }
 }
