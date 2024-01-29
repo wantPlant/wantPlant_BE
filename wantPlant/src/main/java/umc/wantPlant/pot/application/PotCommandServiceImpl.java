@@ -22,6 +22,8 @@ import umc.wantPlant.todo.application.TodoService;
 import umc.wantPlant.todo.domain.Todo;
 import umc.wantPlant.todo.repository.TodoRepository;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 
@@ -96,11 +98,40 @@ public class PotCommandServiceImpl implements PotCommandService{
 
     @Override
     @Transactional
-    public Pot modifyPot(Long potId, PotRequestDTO.PatchPotDTO request) {
+    public Pot updatePot(Long potId, PotRequestDTO.PatchPotDTO request) {
         Pot pot = potRepository.findById(potId).orElseThrow(
                 ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
         );
         pot.setPotName(request.getPotName());
+        return potRepository.save(pot);
+    }
+
+    @Override
+    @Transactional
+    public Pot updatePot(Todo todo) {
+        Pot pot = potRepository.findByPotId(todo.getGoal().getPot().getPotId()).get();
+
+        //proceed update
+        pot.updatePotProceed(todo.getIsComplete());
+
+        //url update
+        String keyName = "potType/"+pot.getPotType()+"-"+0;;
+        String potImgUrl = "";
+        switch (pot.getProceed()/10){
+            case 0 -> keyName = "potType/"+pot.getPotType()+"-"+0;
+            case 1 -> keyName = "potType/"+pot.getPotType()+"-"+1;
+            case 2 -> keyName = "potType/"+pot.getPotType()+"-"+2;
+            case 3 -> keyName = "potType/"+pot.getPotType()+"-"+3;
+        }
+        //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
+        pot.setPotImgUrl(potImgUrl);
+
+        //completedAt update
+        if(pot.getProceed() >= 30)
+            pot.setCompleteAt(LocalDate.now());
+        else
+            pot.setCompleteAt(null);
+
         return potRepository.save(pot);
     }
 

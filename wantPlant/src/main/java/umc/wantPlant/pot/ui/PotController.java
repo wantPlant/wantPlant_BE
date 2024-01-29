@@ -140,7 +140,7 @@ public class PotController {
     public ApiResponse<String> patchPot(
             @PathVariable(name = "potId") Long potId,
             @RequestBody PotRequestDTO.PatchPotDTO request){
-        Pot pot = potCommandService.modifyPot(potId, request);
+        Pot pot = potCommandService.updatePot(potId, request);
         return ApiResponse.onSuccess(pot.getPotId()+"번 화분이 정상적으로 수정되었습니다.");
     }
 

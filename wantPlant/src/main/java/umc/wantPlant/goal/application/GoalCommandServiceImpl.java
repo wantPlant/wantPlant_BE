@@ -20,6 +20,7 @@ public class GoalCommandServiceImpl implements GoalCommandService{
     private final GoalRepository goalRepository;
     private final PotQueryService potQueryService;
     private final TodoService todoService;
+
     @Override
     @Transactional
     public Goal createGoal(GoalRequestDTO.PostGoalDTO request) {
