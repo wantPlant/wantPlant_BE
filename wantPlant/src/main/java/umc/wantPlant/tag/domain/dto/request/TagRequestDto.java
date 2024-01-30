@@ -1,11 +1,15 @@
 package umc.wantPlant.tag.domain.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 import umc.wantPlant.tag.domain.Tag;
 import umc.wantPlant.tag.domain.TagColor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 public class TagRequestDto {
@@ -14,12 +18,18 @@ public class TagRequestDto {
 
     private String tagName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime startDate;
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm")
+    @Schema(example = "12:30")
+    private LocalTime tagTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
 
     public Tag toEntity(){
         return Tag.builder()
-                .startDate(startDate)
+                .tagTime(tagTime)
+                .date(date)
                 .tagColor(tagColor)
                 .tagName(tagName)
                 .build();
