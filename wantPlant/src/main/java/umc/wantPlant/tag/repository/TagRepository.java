@@ -13,9 +13,9 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
     Optional<Tag> findById(Long id);
 
-    @Query("SELECT t FROM Tag t WHERE YEAR(t.startDate) = :year AND MONTH(t.startDate) = :month")
+    @Query("SELECT t FROM Tag t WHERE YEAR(t.date) = :year AND MONTH(t.date) = :month")
     List<Tag> findTagByMonth(@Param("year") int year, @Param("month") int month);
 
-    @Query("SELECT t FROM Tag t WHERE YEAR(t.startDate) = :year AND MONTH(t.startDate) = :month AND DAY(t.startDate) = :day")
+    @Query("SELECT t FROM Tag t WHERE YEAR(t.date) = :year AND MONTH(t.date) = :month AND DAY(t.date) = :day")
     List<Tag> findTagByDay(@Param("year") int year, @Param("month") int month, @Param("day") int day);
 }

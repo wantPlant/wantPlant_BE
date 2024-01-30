@@ -1,6 +1,7 @@
 package umc.wantPlant.tag.ui;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,8 @@ public class TagController {
     @Operation(summary = "태그 생성 API")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),})
-    public ApiResponse<TagResponseDto> addTag(@RequestBody TagRequestDto tagRequestDto){
+    public ApiResponse<TagResponseDto> addTag(
+            @RequestBody TagRequestDto tagRequestDto){
         return ApiResponse.onSuccess(tagService.addTag(tagRequestDto));
     }
 
