@@ -8,8 +8,9 @@ import umc.wantPlant.tag.domain.Tag;
 import umc.wantPlant.tag.domain.TagColor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+
 
 @Getter
 public class TagRequestDto {
@@ -17,6 +18,7 @@ public class TagRequestDto {
     private TagColor tagColor;
 
     private String tagName;
+
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm")
     @Schema(example = "12:30")
@@ -34,4 +36,5 @@ public class TagRequestDto {
                 .tagName(tagName)
                 .build();
     }
+
 }

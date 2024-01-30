@@ -2,6 +2,7 @@ package umc.wantPlant.garden.domain.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import umc.wantPlant.garden.domain.enums.GardenCategories;
 
 public class GardenRequestDTO {
 
@@ -14,13 +15,13 @@ public class GardenRequestDTO {
 		@NotBlank
 		private String description;
 
-		// TODO: String으로 정원카테고리 바꾸기
 		@NotBlank
 		private String category;
 	}
 
 	@Getter
 	public static class UpdateGardenDTO {
+
 		@NotBlank
 		private String name;
 

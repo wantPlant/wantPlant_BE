@@ -28,7 +28,7 @@ public class Pot {
     private int proceed;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "DEFAULT 'PURPLE'")
+    @Column(columnDefinition = "VARCHAR(15) DEFAULT 'PURPLE'")
     private PotTagColor potTagColor;
 
     @Column(nullable = false)
@@ -42,4 +42,21 @@ public class Pot {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "garden_id")
     private Garden garden;
+
+    public void setPotName(String potName){
+        this.potName = potName;
+    }
+    public void updatePotProceed(boolean todoIsComplete){
+        if(todoIsComplete){
+            this.proceed +=1;
+        }else{
+            this.proceed -=1;
+        }
+    }
+    public void setPotImgUrl(String imgUrl){
+        this.potImageUrl = imgUrl;
+    }
+    public void setCompleteAt(LocalDate date){
+        this.completeAt = date;
+    }
 }

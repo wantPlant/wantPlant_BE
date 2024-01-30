@@ -1,5 +1,7 @@
 package umc.wantPlant.pot.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum PotType {
     PEPPERMINT, //페퍼민트
     ROSEMARY, //로즈마리
@@ -10,4 +12,11 @@ public enum PotType {
     LAVENDER, //라벤더
     GERANIUM, //제라늄
     JASMINE //자스민
+    ;
+
+//    @JsonCreator
+
+    public static PotType getRandom(){
+        return values()[(int) (Math.random() * values().length)];
+    }
 }

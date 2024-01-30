@@ -7,17 +7,17 @@ import umc.wantPlant.garden.domain.dto.GardenRequestDTO;
 import umc.wantPlant.garden.domain.dto.GardenResponseDTO;
 
 public interface GardenCommandService {
-	GardenResponseDTO.GardenResultDTO creat(GardenRequestDTO.GardenCreatDTO creat);
+	GardenResponseDTO.GardenCreatResultDTO creat(GardenRequestDTO.GardenCreatDTO creat);
 
-	GardenResponseDTO.GardenResultDTO update(Garden garden, GardenRequestDTO.UpdateGardenDTO update);
+	GardenResponseDTO.GardenUpdateResultDTO update(Long gardenId, GardenRequestDTO.UpdateGardenDTO update);
 
-	GardenResponseDTO.GardenResultDTO updateName(Garden garden, String name);
+	GardenResponseDTO.GardenUpdateResultDTO updateName(Long gardenId, String name);
 
-	GardenResponseDTO.GardenResultDTO updateDescription(Garden garden, String description);
+	GardenResponseDTO.GardenUpdateResultDTO updateDescription(Long gardenId, String description);
 
 	GardenResponseDTO.GardenListDTO getGardenList(Page<Garden> gardenPage);
 
-	GardenResponseDTO.GardenDTO toGardenDTO(Garden garden);
+	GardenResponseDTO.GardenResultDTO toGardenResultDTO(Garden garden);
 
 	void delete(Long gardenId);
 }

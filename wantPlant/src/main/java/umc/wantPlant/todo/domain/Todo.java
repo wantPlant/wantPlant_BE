@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import umc.wantPlant.goal.domain.Goal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -33,7 +35,7 @@ public class Todo {
         this.isComplete = isComplete;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name="GOAL_ID")
-//    Goal goal;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="GOAL_ID")
+    Goal goal;
 }

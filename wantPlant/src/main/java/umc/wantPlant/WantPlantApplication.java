@@ -10,5 +10,4 @@ public class WantPlantApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WantPlantApplication.class, args);
 	}
-
 }

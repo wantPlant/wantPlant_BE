@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.wantPlant.garden.domain.enums.GardenCategories;
+import umc.wantPlant.pot.domain.enums.PotTagColor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +30,10 @@ public class PotResponseDTO {
     public static class GetPotNamesResultDTO{
         List<PotNameDTO> potNames;
     }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PotNameDTO{
         Long potId;
         String potName;
@@ -41,6 +47,10 @@ public class PotResponseDTO {
     public static class GetPotImagesResultDTO{
         List<PotImageDTO> potImages;
     }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PotImageDTO{
         Long potId;
         String potImageUrl;
@@ -53,13 +63,22 @@ public class PotResponseDTO {
     @AllArgsConstructor
     public static class GetPotsResultDTO{
         List<PotDTO> pots;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
     }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PotDTO{
         Long potId;
         String potName;
-        LocalDate startAt;
         int proceed;
         String potImageUrl;
+        LocalDate startAt;
     }
 
     //웹: 날짜별 화분&todos 조회
@@ -68,24 +87,23 @@ public class PotResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetCategoryPotTodoPerDateDTO{
-        List<CategoryDTO> categories;
-    }
-    public static class CategoryDTO{
-        String category;
-        List<PotPerDateDTO> pots;
-    }
-    public static class PotPerDateDTO{
-        Long potId;
-        String potName;
-        String potTagColor;
         List<TodoPerDateDTO> todos;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class TodoPerDateDTO{
+        GardenCategories category;
+        Long potId;
+        String potName;
+        PotTagColor potTagColor;
         Long todoId;
         String todoTitle;
         boolean isComplete;
     }
+
 
     //화분 상세 조회
     @Getter
@@ -100,19 +118,51 @@ public class PotResponseDTO {
         String potImageUrl;
     }
 
-    //완료한 화분 리스트 조회
+    //앱 : 완료한 화분 리스트 조회
     @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetCompletedPotsResultDTO{
-        List<PotCompleteDTO> pots;
+        List<CompletedPotDTO> pots;
     }
-    public static class PotCompleteDTO{
-        String potTitle;
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CompletedPotDTO{
+        String potName;
         String potImageUrl;
         LocalDate startAt;
         LocalDate completeAt;
     }
 
+    //웹 : 완료한 화분 리스트 조회
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetCompletedPotsForWebResultDTO{
+        List<CompletedPotForWebDTO> pots;
+    }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CompletedPotForWebDTO{
+        GardenCategories gardenCategory;
+        String potName;
+        String GardenName;
+        LocalDate startAt;
+        LocalDate completedAt;
+        String potImgUrl;
+        List<TodoDTO> todos;
+    }
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TodoDTO{
+        String todoTitle;
+    }
 }
