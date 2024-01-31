@@ -19,7 +19,8 @@ public class TagService {
     private final TagRepository tagRepository;
 
     public TagResponseDto addTag(TagRequestDto tagRequestDto) {
-        return TagResponseDto.of(tagRepository.save(tagRequestDto.toEntity()));
+        Tag savedTag = tagRepository.save(tagRequestDto.toEntity());
+        return TagResponseDto.of(savedTag);
     }
 
     public TagResponseDto getTag(Long tagId) {
