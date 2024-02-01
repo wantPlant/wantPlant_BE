@@ -74,6 +74,7 @@ public class PotCommandServiceImpl implements PotCommandService{
 
         Garden garden = gardenQueryService.getGardenById(request.getGardenId());
 
+
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
                 .potType(potType)
@@ -95,9 +96,7 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override
     @Transactional
     public Pot updatePot(Long potId, PotRequestDTO.PatchPotDTO request) {
-        Pot pot = potRepository.findById(potId).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        Pot pot = potRepository.findById(potId).get();
         pot.setPotName(request.getPotName());
         return potRepository.save(pot);
     }

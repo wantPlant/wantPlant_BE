@@ -9,4 +9,5 @@ import java.util.List;
 public interface GoalQueryService {
     public GoalResponseDTO.GetGoalsTodosByPotResultDTO getGoalsTodosByPot(Long potId);
     public List<Goal> findAllByPot(Pot pot);
+    public boolean existGoalById(Long goalId);
 }
