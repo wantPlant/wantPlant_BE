@@ -2,6 +2,7 @@ package umc.wantPlant.pot.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import umc.wantPlant.apipayload.code.status.ErrorStatus;
 import umc.wantPlant.apipayload.exceptions.GeneralException;
@@ -48,9 +49,7 @@ public class PotCommandServiceImpl implements PotCommandService{
         //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
 
 
-        Garden garden = gardenQueryService.getGardenById(request.getGardenId()).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        );
+        Garden garden = gardenQueryService.getGardenById(request.getGardenId());
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
                 .potType(potType)
@@ -73,9 +72,7 @@ public class PotCommandServiceImpl implements PotCommandService{
         //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
 
 
-        Garden garden = gardenQueryService.getGardenById(request.getGardenId()).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        );
+        Garden garden = gardenQueryService.getGardenById(request.getGardenId());
 
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
@@ -151,3 +148,4 @@ public class PotCommandServiceImpl implements PotCommandService{
         potRepository.deleteByPotId(potId);
     }
 }
+

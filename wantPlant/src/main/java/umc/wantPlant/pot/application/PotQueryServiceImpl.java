@@ -31,9 +31,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotNamesResultDTO getPotNamesByGardenId(Long gardenId) {
-        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        )).orElseThrow(
+        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId)).orElseThrow(
                 ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
         );
 
@@ -51,9 +49,8 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotImagesResultDTO getPotImagesByGardenId(Long gardenId) {
-        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND))
-        ).orElseThrow(
+        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId))
+            .orElseThrow(
                 ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
         );
 
@@ -69,9 +66,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotsResultDTO getPotsByGardenId(Long gardenId, int page) {
-        Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        ), PageRequest.of(page, 4));
+        Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId), PageRequest.of(page, 4));
 
         //List<PotResponseDTO.PotDTO> 만들기
         List<PotResponseDTO.PotDTO> potDTOS = pots.stream().map(pot->
@@ -134,9 +129,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetCompletedPotsResultDTO getCompletedPotsByGardenId(Long gardenId) {
-        List<Pot> pots = potRepository.findAllCompletePotsByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        )).orElseThrow(
+        List<Pot> pots = potRepository.findAllCompletePotsByGarden(gardenQueryService.getGardenById(gardenId)).orElseThrow(
                 ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
         );
 
