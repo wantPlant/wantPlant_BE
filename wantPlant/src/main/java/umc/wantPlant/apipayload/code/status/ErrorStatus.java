@@ -22,7 +22,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
 
 	//정원 카테고리
-	GARDEN_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "GARDEN_CATEGORY400", "정원 카테고리를 찾을 수 없습니다.  정원 카테고리 :EXERCISE, HOBBY , STUDY"),
+	GARDEN_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "GARDEN_CATEGORY400", "정원 카테고리를 찾을 수 없습니다.  정원 카테고리 :EXERCISE, HOBBY , STUDY")
 
 	//화분
 	,POT_NOT_FOUND(HttpStatus.NOT_FOUND, "POT4001", "화분을 찾을 수 없습니다.")
