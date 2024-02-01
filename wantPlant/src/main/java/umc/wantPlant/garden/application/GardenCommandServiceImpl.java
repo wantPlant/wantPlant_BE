@@ -1,5 +1,7 @@
 package umc.wantPlant.garden.application;
 
+import static java.util.stream.Collectors.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import umc.wantPlant.apipayload.code.status.ErrorStatus;
+import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.domain.dto.GardenRequestDTO;
 import umc.wantPlant.garden.domain.dto.GardenResponseDTO;
@@ -22,24 +26,13 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 
 	private final GardenRepository gardenRepository;
 	private final EntityManager em;    //엔티티매니저 주입
+	private final GardenQueryService queryService;
 
 	@Override
 	@Transactional
 	public GardenResponseDTO.GardenCreatResultDTO creat(GardenRequestDTO.GardenCreatDTO creat) {
 
-		GardenCategories gardenCategories = null;
-
-		switch (creat.getCategory()) {
-			case "EXERCISE":
-				gardenCategories = GardenCategories.EXERCISE;
-				break;
-			case "STUDY":
-				gardenCategories = GardenCategories.STUDY;
-				break;
-			case "HOBBY":
-				gardenCategories = GardenCategories.HOBBY;
-				break;
-		}
+		GardenCategories gardenCategories = queryService.getGardenCategory(creat.getCategory());
 
 		Garden newGarden = gardenRepository.save(
 			Garden.builder()
@@ -57,8 +50,11 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 
 	@Override
 	@Transactional
-	public GardenResponseDTO.GardenUpdateResultDTO update(Long gardenId, GardenRequestDTO.UpdateGardenDTO update) {
-		Garden garden = em.find(Garden.class, gardenId);
+	public GardenResponseDTO.GardenUpdateResultDTO update(GardenRequestDTO.UpdateGardenDTO update) {
+
+		Garden testGarden = queryService.getGardenById(update.getId());
+
+		Garden garden = em.find(Garden.class, update.getId());
 		garden.setName(update.getName());
 		garden.setDescription(update.getDescription());
 
@@ -72,9 +68,9 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 
 	@Override
 	@Transactional
-	public GardenResponseDTO.GardenUpdateResultDTO updateName(Long gardenId, String name) {
-		Garden garden = em.find(Garden.class, gardenId);
-		garden.setName(name);
+	public GardenResponseDTO.GardenUpdateResultDTO updateName(GardenRequestDTO.UpdateGardenDTO update) {
+		Garden garden = em.find(Garden.class, update.getId());
+		garden.setName(update.getName());
 
 		return GardenResponseDTO.GardenUpdateResultDTO.builder()
 			.gardenId(garden.getId())
@@ -86,9 +82,9 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 
 	@Override
 	@Transactional
-	public GardenResponseDTO.GardenUpdateResultDTO updateDescription(Long gardenId, String description) {
-		Garden garden = em.find(Garden.class, gardenId);
-		garden.setDescription(description);
+	public GardenResponseDTO.GardenUpdateResultDTO updateDescription(GardenRequestDTO.UpdateGardenDTO update) {
+		Garden garden = em.find(Garden.class, update.getId());
+		garden.setDescription(update.getDescription());
 
 		return GardenResponseDTO.GardenUpdateResultDTO.builder()
 			.gardenId(garden.getId())
@@ -101,6 +97,8 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	@Override
 	@Transactional
 	public void delete(Long gardenId) {
+		Garden deleteGarden = queryService.getGardenById(gardenId);
+
 		gardenRepository.deleteById(gardenId);
 	}
 
@@ -119,11 +117,27 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	}
 
 	@Override
+	public GardenResponseDTO.GardenResultList getGardenList() {
+		List<Garden> gardens = gardenRepository.findAll();
+		Long count = queryService.getGardenSize();
+
+
+		List<GardenResponseDTO.GardenResultDTO> result = gardens.stream()
+			.map(this::toGardenResultDTO)
+			.toList();
+
+		return GardenResponseDTO.GardenResultList.builder()
+			.gardens(result)
+			.totalElements(count)
+			.build();
+	}
+
+	@Override
 	public GardenResponseDTO.GardenListDTO getGardenList(Page<Garden> gardenPage) {
 
 		List<GardenResponseDTO.GardenResultDTO> gardenDTOList = gardenPage.stream()
 			.map(this::toGardenResultDTO)
-			.collect(Collectors.toList());
+			.collect(toList());
 
 		return GardenResponseDTO.GardenListDTO.builder()
 			.isLast(gardenPage.isLast())
