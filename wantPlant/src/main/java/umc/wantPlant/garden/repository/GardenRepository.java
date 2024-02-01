@@ -19,6 +19,4 @@ public interface GardenRepository extends JpaRepository<Garden, Long> {
 	Page<Garden> findByCategory(GardenCategories category, PageRequest pageRequest);
 	@Query("SELECT p FROM Pot p WHERE (p.garden) = :garden")
 	List<Pot> findPotByGardenId(@Param("garden") Garden garden);
-
-
 }
