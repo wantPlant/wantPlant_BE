@@ -1,5 +1,8 @@
 package umc.wantPlant.pot.application;
 
+import java.util.List;
+
+import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
 import umc.wantPlant.todo.domain.Todo;

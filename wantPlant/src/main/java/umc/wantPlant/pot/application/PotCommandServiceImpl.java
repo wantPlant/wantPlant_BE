@@ -2,6 +2,7 @@ package umc.wantPlant.pot.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import umc.wantPlant.apipayload.code.status.ErrorStatus;
 import umc.wantPlant.apipayload.exceptions.GeneralException;
@@ -147,3 +148,4 @@ public class PotCommandServiceImpl implements PotCommandService{
         potRepository.deleteByPotId(potId);
     }
 }
+
