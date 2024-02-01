@@ -14,6 +14,7 @@ import umc.wantPlant.completedPot.application.CompletedPotCommandService;
 import umc.wantPlant.completedPot.application.CompletedPotQueryService;
 import umc.wantPlant.completedPot.domain.dto.CompletedPotResponseDTO;
 import umc.wantPlant.pot.domain.dto.PotResponseDTO;
+import umc.wantPlant.pot.validation.annotation.ExistGarden;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class CompletedPotController {
     })
     @Parameter(name = "gardenId", description = "Query String으로 gardenId를 주세요")
     public ApiResponse<CompletedPotResponseDTO.GetCompletedPotsResultDTO> getCompletedPots(
-            @RequestParam(name = "gardenId") Long gardenId
+            @ExistGarden @RequestParam(name = "gardenId") Long gardenId
     ){
         completedPotQueryService.getCompletedPotsByGardenId(gardenId);
         return ApiResponse.onSuccess(completedPotQueryService.getCompletedPotsByGardenId(gardenId));

@@ -22,9 +22,8 @@ public class CompletedPotQueryServiceImpl implements CompletedPotQueryService {
     private final GardenQueryService gardenQueryService;
     @Override //완료한 화분 조회
     public CompletedPotResponseDTO.GetCompletedPotsResultDTO getCompletedPotsByGardenId(Long gardenId) {
-        List<CompletedPot> pots = completedPotRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).get()).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        List<CompletedPot> pots = completedPotRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId)
+                .get()).get();
 
         List<CompletedPotResponseDTO.CompletedPotDTO> potCompleteDTOS = pots.stream().map(pot ->
                 CompletedPotResponseDTO.CompletedPotDTO.builder()
