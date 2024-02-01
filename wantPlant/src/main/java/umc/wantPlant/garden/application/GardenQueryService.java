@@ -12,5 +12,6 @@ public interface GardenQueryService {
 	Page<Garden> getGardens(Integer page, Integer pageSize);
 
 	Page<Garden> getGardensByCategory(String category, Integer page, Integer pageSize);
+	boolean existGardenById(Long gardenId);
 }
 

@@ -31,11 +31,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotNamesResultDTO getPotNamesByGardenId(Long gardenId) {
-        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        )).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).get()).get();
 
         //name 리스트 만들기
         List<PotResponseDTO.PotNameDTO> potNameDTOS = pots.stream()
@@ -51,11 +47,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotImagesResultDTO getPotImagesByGardenId(Long gardenId) {
-        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND))
-        ).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).get()).get();
 
         List<PotResponseDTO.PotImageDTO> potImageDTOS = pots.stream().map(
                 pot-> PotResponseDTO.PotImageDTO.builder()
@@ -69,9 +61,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotsResultDTO getPotsByGardenId(Long gardenId, int page) {
-        Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        ), PageRequest.of(page, 4));
+        Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId).get(), PageRequest.of(page, 4));
 
         //List<PotResponseDTO.PotDTO> 만들기
         List<PotResponseDTO.PotDTO> potDTOS = pots.stream().map(pot->
@@ -119,9 +109,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override //pot 상세조회
     public PotResponseDTO.GetPotDetailResultDTO getPotDetailByPotId(Long potId) {
-        Pot pot = potRepository.findByPotId(potId).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        Pot pot = potRepository.findByPotId(potId).get();
 
         return PotResponseDTO.GetPotDetailResultDTO.builder()
                 .gardenName(pot.getGarden().getName())
@@ -135,7 +123,11 @@ public class PotQueryServiceImpl implements PotQueryService{
     @Override
     public Pot getPotByPotId(Long potId) {
 
-        return potRepository.findByPotId(potId).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND));
+        return potRepository.findByPotId(potId).get();
+    }
+
+    @Override
+    public boolean existPotById(Long potId) {
+        return potRepository.existsById(potId);
     }
 }

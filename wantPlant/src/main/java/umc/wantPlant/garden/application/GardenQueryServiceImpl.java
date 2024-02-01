@@ -46,4 +46,9 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 		}
 		return gardenRepository.findByCategory(gardenCategory, PageRequest.of(page, pageSize));
 	}
+
+	@Override
+	public boolean existGardenById(Long gardenId) {
+		return gardenRepository.existsById(gardenId);
+	}
 }

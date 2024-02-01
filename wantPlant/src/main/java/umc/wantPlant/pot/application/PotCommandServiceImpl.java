@@ -49,9 +49,7 @@ public class PotCommandServiceImpl implements PotCommandService{
 //
 //        potImgUrl = amazonS3Service.getUploadFileUrlByOrginalFileName(keyName);
 
-        Garden garden = gardenQueryService.getGardenById(request.getGardenId()).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        );
+        Garden garden = gardenQueryService.getGardenById(request.getGardenId()).get();
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
                 .potType(potType)
@@ -73,9 +71,7 @@ public class PotCommandServiceImpl implements PotCommandService{
         //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
 
 
-        Garden garden = gardenQueryService.getGardenById(request.getGardenId()).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        );
+        Garden garden = gardenQueryService.getGardenById(request.getGardenId()).get();
 
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
@@ -98,9 +94,7 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override
     @Transactional
     public Pot updatePot(Long potId, PotRequestDTO.PatchPotDTO request) {
-        Pot pot = potRepository.findById(potId).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        Pot pot = potRepository.findById(potId).get();
         pot.setPotName(request.getPotName());
         return potRepository.save(pot);
     }

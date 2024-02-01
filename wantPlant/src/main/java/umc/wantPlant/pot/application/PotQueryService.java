@@ -13,4 +13,5 @@ public interface PotQueryService {
     public PotResponseDTO.GetCategoryPotTodoPerDateDTO getCategoryPotTodoByDate(LocalDate date);
     public PotResponseDTO.GetPotDetailResultDTO getPotDetailByPotId(Long potId);
     public Pot getPotByPotId(Long potId);
+    public boolean existPotById(Long potId);
 }

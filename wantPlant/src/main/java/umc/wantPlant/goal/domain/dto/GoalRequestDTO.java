@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import umc.wantPlant.pot.validation.annotation.ExistPot;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.LocalTime;
 public class GoalRequestDTO {
     @Getter
     public static class PostGoalDTO{
-        @NotNull
+        @ExistPot
         Long potId;
         @NotBlank(message = "목표 이름은 비어 있을 수 없습니다.")
         String goalTitle;
@@ -21,7 +22,7 @@ public class GoalRequestDTO {
 
     @Getter
     public static class PostGoalTodoDTO{
-        @NotNull
+        @ExistPot
         Long potId;
         @NotBlank(message = "목표 이름은 비어 있을 수 없습니다.")
         String goalTitle;
