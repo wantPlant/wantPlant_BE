@@ -105,8 +105,8 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	public void delete(Long gardenId) {
 
 		Garden deleteGarden = queryService.getGardenById(gardenId);
-
-		gardenRepository.deleteById(gardenId);
+		gardenRepository.deletePotsByGarden(deleteGarden);
+		gardenRepository.deleteGardenAndPots(deleteGarden);
 	}
 
 	@Override
