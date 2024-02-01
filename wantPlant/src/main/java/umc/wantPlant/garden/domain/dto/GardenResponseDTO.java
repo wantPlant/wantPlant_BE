@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.domain.enums.GardenCategories;
 import umc.wantPlant.pot.domain.Pot;
 
@@ -43,6 +44,23 @@ public class GardenResponseDTO {
 		String gardenCategory;
 		List<Pot> potList;
 	}
+
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GardenResultList {
+		Long totalElements;
+		List<GardenResultDTO> gardens;
+	}
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class GardenSize {
+		Long totalElements;
+	}
+
 
 	@Builder
 	@NoArgsConstructor
