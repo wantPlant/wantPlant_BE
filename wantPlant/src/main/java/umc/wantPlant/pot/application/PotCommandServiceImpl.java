@@ -72,9 +72,7 @@ public class PotCommandServiceImpl implements PotCommandService{
         String potImgUrl = "";
         potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
 
-
         Garden garden = gardenQueryService.getGardenById(request.getGardenId());
-
 
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())

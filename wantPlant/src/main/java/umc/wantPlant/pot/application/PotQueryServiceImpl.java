@@ -61,7 +61,8 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotsResultDTO getPotsByGardenId(Long gardenId, int page) {
-        Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId), PageRequest.of(page, 4));
+        Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId)
+                , PageRequest.of(page, 4));
 
         //List<PotResponseDTO.PotDTO> 만들기
         List<PotResponseDTO.PotDTO> potDTOS = pots.stream().map(pot->
