@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import umc.wantPlant.apipayload.ApiResponse;
 import umc.wantPlant.apipayload.code.status.ErrorStatus;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/api/pots")
 public class PotController {
     private final PotCommandService potCommandService;
@@ -106,27 +108,6 @@ public class PotController {
     public ApiResponse<PotResponseDTO.GetPotDetailResultDTO> getPotDetail(
             @PathVariable(name = "potId")Long potId){
         return ApiResponse.onSuccess(potQueryService.getPotDetailByPotId(potId));
-    }
-
-    @GetMapping ("/completed/app")
-    @Operation(summary = "[앱] 완료한 화분 리스트 조회 API", description = "완료한 화분 리스트를 조회하는 API입니다. 도감에 사용하시면 됩니다.")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
-    })
-    @Parameter(name = "gardenId", description = "Query String으로 gardenId를 주세요")
-    public ApiResponse<PotResponseDTO.GetCompletedPotsResultDTO> getCompletedPots(
-            @RequestParam(name = "gardenId") Long gardenId
-    ){
-        return ApiResponse.onSuccess(potQueryService.getCompletedPotsByGardenId(gardenId));
-    }
-
-    @GetMapping ("/completed/web")
-    @Operation(summary = "[웹] 완료한 화분 리스트 조회 API", description = "완료한 화분 리스트를 조회하는 API입니다. 도감에 사용하시면 됩니다.")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
-    })
-    public ApiResponse<PotResponseDTO.GetCompletedPotsForWebResultDTO> getCompletedPotsForWeb(){
-        return ApiResponse.onSuccess(potQueryService.getCompletedPotsForWeb());
     }
 
     @PatchMapping("/{potId}")

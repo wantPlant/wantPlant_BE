@@ -3,7 +3,9 @@ package umc.wantPlant.goal.ui;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import umc.wantPlant.apipayload.ApiResponse;
 import umc.wantPlant.goal.application.GoalCommandService;
@@ -14,6 +16,7 @@ import umc.wantPlant.goal.domain.dto.GoalResponseDTO;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("api/goals")
 public class GoalController {
     private final GoalCommandService goalCommandService;
@@ -24,7 +27,7 @@ public class GoalController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
-    public ApiResponse<String> postGoal(@RequestBody GoalRequestDTO.PostGoalDTO request){
+    public ApiResponse<String> postGoal(@Valid @RequestBody GoalRequestDTO.PostGoalDTO request){
         Goal goal = goalCommandService.createGoal(request);
         return ApiResponse.onSuccess(goal.getGoalId()+"번 목표 생성 완료");
     }
