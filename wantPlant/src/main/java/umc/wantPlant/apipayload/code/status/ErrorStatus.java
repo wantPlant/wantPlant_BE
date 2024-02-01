@@ -24,6 +24,9 @@ public enum ErrorStatus implements BaseErrorCode {
 	,POT_DELETE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "POT4002", "화분을 삭제할 수 없습니다.")
 	,POT_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "POT4003", "잘못된 화분 타입입니다.")
 	,POT_TAG_COLOR_NOT_FOUND(HttpStatus.NOT_FOUND, "POT4003", "잘못된 태그 컬러입니다.")
+
+	//로그인
+	,LOGIN_GENERAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "LOGIN500", "로그인 에러")
 	;
 
 	private final HttpStatus httpStatus;
