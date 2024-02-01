@@ -20,6 +20,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import umc.wantPlant.apipayload.ApiResponse;
+import umc.wantPlant.apipayload.code.status.ErrorStatus;
+import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
 import umc.wantPlant.garden.application.GardenCommandService;
 import umc.wantPlant.garden.application.GardenQueryService;
 import umc.wantPlant.garden.domain.Garden;
@@ -144,12 +146,9 @@ public class GardenController {
 	@Parameters({@Parameter(name = "gardenId", description = "정원의 번호를 주세요, path variable 입니다!")
 	})
 	public ApiResponse<String> deleteGardenById(@PathVariable Long gardenId) {
-		try {
 			gardenCommandService.delete(gardenId);
 			return ApiResponse.onSuccess("삭제성공");
-		} catch (Exception e) {
-			return ApiResponse.onSuccess("삭제 실패");
-		}
+
 	}
 
 }
