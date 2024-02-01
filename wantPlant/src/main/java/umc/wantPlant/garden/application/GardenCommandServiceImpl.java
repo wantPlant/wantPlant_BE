@@ -44,6 +44,8 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 		return GardenResponseDTO.GardenCreatResultDTO
 			.builder()
 			.gardenId(newGarden.getId())
+			.name(newGarden.getName())
+			.description(newGarden.getDescription())
 			.gardenCategory(creat.getCategory())
 			.build();
 	}
