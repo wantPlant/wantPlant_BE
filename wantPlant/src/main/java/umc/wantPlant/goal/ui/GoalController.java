@@ -27,7 +27,7 @@ public class GoalController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
-    public ApiResponse<String> postGoal(@Valid @RequestBody GoalRequestDTO.PostGoalDTO request){
+    public ApiResponse<String> postGoal(@RequestBody @Valid GoalRequestDTO.PostGoalDTO request){
         Goal goal = goalCommandService.createGoal(request);
         return ApiResponse.onSuccess(goal.getGoalId()+"번 목표 생성 완료");
     }
