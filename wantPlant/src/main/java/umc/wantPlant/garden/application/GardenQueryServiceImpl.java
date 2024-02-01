@@ -35,20 +35,8 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 
 	@Override
 	public Page<Garden> getGardensByCategory(String category, Integer page, Integer pageSize) {
-		GardenCategories gardenCategory = null;
+		GardenCategories gardenCategory = getGardenCategory(category);
 
-		switch (category) {
-			case "EXERCISE":
-				gardenCategory = GardenCategories.EXERCISE;
-				break;
-			case "STUDY":
-				gardenCategory = GardenCategories.STUDY;
-				break;
-			case "HOBBY":
-				gardenCategory = GardenCategories.HOBBY;
-				break;
-
-		}
 		return gardenRepository.findByCategory(gardenCategory, PageRequest.of(page, pageSize));
 	}
 
