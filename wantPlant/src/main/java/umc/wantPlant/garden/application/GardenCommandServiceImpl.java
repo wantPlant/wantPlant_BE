@@ -69,6 +69,8 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	@Override
 	@Transactional
 	public GardenResponseDTO.GardenUpdateResultDTO updateName(GardenRequestDTO.UpdateGardenDTO update) {
+		Garden testGarden = queryService.getGardenById(update.getId());
+
 		Garden garden = em.find(Garden.class, update.getId());
 		garden.setName(update.getName());
 
@@ -83,6 +85,8 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	@Override
 	@Transactional
 	public GardenResponseDTO.GardenUpdateResultDTO updateDescription(GardenRequestDTO.UpdateGardenDTO update) {
+		Garden testGarden = queryService.getGardenById(update.getId());
+
 		Garden garden = em.find(Garden.class, update.getId());
 		garden.setDescription(update.getDescription());
 
@@ -97,6 +101,7 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	@Override
 	@Transactional
 	public void delete(Long gardenId) {
+
 		Garden deleteGarden = queryService.getGardenById(gardenId);
 
 		gardenRepository.deleteById(gardenId);
