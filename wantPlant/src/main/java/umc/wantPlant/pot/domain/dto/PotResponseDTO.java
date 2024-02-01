@@ -118,51 +118,5 @@ public class PotResponseDTO {
         String potImageUrl;
     }
 
-    //앱 : 완료한 화분 리스트 조회
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class GetCompletedPotsResultDTO{
-        List<CompletedPotDTO> pots;
-    }
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class CompletedPotDTO{
-        String potName;
-        String potImageUrl;
-        LocalDate startAt;
-        LocalDate completeAt;
-    }
 
-    //웹 : 완료한 화분 리스트 조회
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class GetCompletedPotsForWebResultDTO{
-        List<CompletedPotForWebDTO> pots;
-    }
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class CompletedPotForWebDTO{
-        GardenCategories gardenCategory;
-        String potName;
-        String GardenName;
-        LocalDate startAt;
-        LocalDate completedAt;
-        String potImgUrl;
-        List<TodoDTO> todos;
-    }
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class TodoDTO{
-        String todoTitle;
-    }
 }
