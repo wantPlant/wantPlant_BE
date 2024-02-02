@@ -1,5 +1,6 @@
 package umc.wantPlant.goal.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -26,7 +27,10 @@ public class GoalResponseDTO {
     public static class TodoDTO{
         Long todoId;
         String todoTitle;
-        LocalDateTime startAt;
-        boolean isComplete;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        LocalDate date;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "kk:mm", timezone = "Asia/Seoul")
+        LocalTime time;
+        Boolean isComplete;
     }
 }

@@ -2,8 +2,8 @@ package umc.wantPlant.goal.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.goal.domain.Goal;
-import umc.wantPlant.goal.domain.dto.GoalRequestDTO;
 import umc.wantPlant.goal.domain.dto.GoalResponseDTO;
 import umc.wantPlant.goal.repository.GoalRepository;
 import umc.wantPlant.pot.application.PotQueryService;
@@ -12,6 +12,7 @@ import umc.wantPlant.todo.application.TodoService;
 import umc.wantPlant.todo.domain.Todo;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +33,9 @@ public class GoalQueryServiceImpl implements GoalQueryService {
                             GoalResponseDTO.TodoDTO.builder()
                                     .todoId(todo.getId())
                                     .todoTitle(todo.getTitle())
-                                    .startAt(todo.getStartTime())
+                                    .date(todo.getDate())
+                                    .time(todo.getTime())
+                                    .isComplete(todo.getIsComplete())
                                     .build()).collect(Collectors.toList());
                     //GoalDTO생성
                     return GoalResponseDTO.GoalDTO.builder()
@@ -52,4 +55,8 @@ public class GoalQueryServiceImpl implements GoalQueryService {
     public List<Goal> findAllByPot(Pot pot) {
         return goalRepository.findAllByPot(pot).get();
     }
+
+    @Override
+    public Optional<Goal> getGoalById(Long goalId){return goalRepository.findById(goalId);}
+
 }
