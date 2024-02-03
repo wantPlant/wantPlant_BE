@@ -61,8 +61,9 @@ public class TagController {
 
     @DeleteMapping("/{tagId}")
     @Operation(summary = "특정 태그를 ID로 삭제")
-    public void deleteTag(@PathVariable Long tagId){
+    public ApiResponse<String> deleteTag(@PathVariable Long tagId){
         tagService.deleteTag(tagId);
+        return ApiResponse.onSuccess("삭제에 성공했습니다.");
     }
 
     @PatchMapping("/update")
