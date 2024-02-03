@@ -44,7 +44,6 @@ public class Todo {
     public void updateTodoTime(LocalTime time){
         this.time = time;
         this.startAt = LocalDateTime.of(this.date, time);
-
     }
     public void updateTodoComplete(Boolean isComplete){
         this.isComplete = isComplete;
