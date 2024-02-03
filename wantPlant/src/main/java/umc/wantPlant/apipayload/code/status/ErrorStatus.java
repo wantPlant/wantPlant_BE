@@ -38,7 +38,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
 	//기타
 	,PAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "PAGE4001", "올바른 페이지 범위가 아닙니다.")
+  //로그인
+	,LOGIN_GENERAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "LOGIN500", "로그인 에러")
 	;
+
 
 	private final HttpStatus httpStatus;
 
