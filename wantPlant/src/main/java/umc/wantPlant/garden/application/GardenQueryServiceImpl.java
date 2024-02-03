@@ -56,4 +56,8 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 			throw new GardenCategoryHandler(ErrorStatus.GARDEN_CATEGORY_NOT_FOUND);
 		}
 	}
+
+	public boolean existGardenById(Long gardenId) {
+		return gardenRepository.existsById(gardenId);
+	}
 }

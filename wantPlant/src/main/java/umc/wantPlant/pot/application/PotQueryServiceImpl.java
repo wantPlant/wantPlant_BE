@@ -31,9 +31,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotNamesResultDTO getPotNamesByGardenId(Long gardenId) {
-        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId)).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId)).get();
 
         //name 리스트 만들기
         List<PotResponseDTO.PotNameDTO> potNameDTOS = pots.stream()
@@ -49,10 +47,7 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotImagesResultDTO getPotImagesByGardenId(Long gardenId) {
-        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId))
-            .orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        List<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId)).get();
 
         List<PotResponseDTO.PotImageDTO> potImageDTOS = pots.stream().map(
                 pot-> PotResponseDTO.PotImageDTO.builder()
@@ -66,14 +61,15 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override
     public PotResponseDTO.GetPotsResultDTO getPotsByGardenId(Long gardenId, int page) {
-        Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId), PageRequest.of(page, 4));
+        Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId)
+                , PageRequest.of(page, 4));
 
         //List<PotResponseDTO.PotDTO> 만들기
         List<PotResponseDTO.PotDTO> potDTOS = pots.stream().map(pot->
                 PotResponseDTO.PotDTO.builder()
                         .potId(pot.getPotId())
                         .potName(pot.getPotName())
-                        .proceed(pot.getProceed())
+                        .proceed(pot.getProceed()%30)
                         .potImageUrl(pot.getPotImageUrl())
                         .startAt(pot.getStartAt())
                         .build()).toList();
@@ -98,6 +94,7 @@ public class PotQueryServiceImpl implements PotQueryService{
             Pot pot = todo.getGoal().getPot();
             return PotResponseDTO.TodoPerDateDTO.builder()
                     .category(pot.getGarden().getCategory())
+                    .gardenId(pot.getGarden().getId())
                     .potId(pot.getPotId())
                     .potName(pot.getPotName())
                     .potTagColor(pot.getPotTagColor())
@@ -114,56 +111,14 @@ public class PotQueryServiceImpl implements PotQueryService{
 
     @Override //pot 상세조회
     public PotResponseDTO.GetPotDetailResultDTO getPotDetailByPotId(Long potId) {
-        Pot pot = potRepository.findByPotId(potId).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        Pot pot = potRepository.findByPotId(potId).get();
 
         return PotResponseDTO.GetPotDetailResultDTO.builder()
                 .gardenName(pot.getGarden().getName())
                 .potId(pot.getPotId())
                 .potName(pot.getPotName())
-                .proceed(pot.getProceed())
+                .proceed(pot.getProceed()%30)
                 .potImageUrl(pot.getPotImageUrl())
-                .build();
-    }
-
-    @Override
-    public PotResponseDTO.GetCompletedPotsResultDTO getCompletedPotsByGardenId(Long gardenId) {
-        List<Pot> pots = potRepository.findAllCompletePotsByGarden(gardenQueryService.getGardenById(gardenId)).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
-
-        List<PotResponseDTO.CompletedPotDTO> potCompleteDTOS = pots.stream().map(pot ->
-                PotResponseDTO.CompletedPotDTO.builder()
-                        .potName(pot.getPotName())
-                        .potImageUrl(pot.getPotImageUrl())
-                        .startAt(pot.getStartAt())
-                        .completeAt(pot.getCompleteAt())
-                        .build()).collect(Collectors.toList());
-
-        return PotResponseDTO.GetCompletedPotsResultDTO.builder()
-                .pots(potCompleteDTOS)
-                .build();
-    }
-
-    @Override
-    public PotResponseDTO.GetCompletedPotsForWebResultDTO getCompletedPotsForWeb() {
-        List<Pot> completedPot = potRepository.findAllByCompletedAt().get();
-
-        List<PotResponseDTO.CompletedPotForWebDTO> completedPotForWebDTOS =
-                completedPot.stream().map(pot ->
-                        PotResponseDTO.CompletedPotForWebDTO.builder()
-                                .potName(pot.getPotName())
-                                .GardenName(pot.getGarden().getName())
-                                .gardenCategory(pot.getGarden().getCategory())
-                                .startAt(pot.getStartAt())
-                                .completedAt(pot.getCompleteAt())
-                                .potImgUrl(pot.getPotImageUrl())
-                                .todos(todoService.getFirstTwoTodo(pot))
-                                .build()).collect(Collectors.toList());
-
-        return PotResponseDTO.GetCompletedPotsForWebResultDTO.builder()
-                .pots(completedPotForWebDTOS)
                 .build();
     }
 
@@ -171,5 +126,10 @@ public class PotQueryServiceImpl implements PotQueryService{
     public Pot getPotByPotId(Long potId) {
 
         return potRepository.findByPotId(potId).get();
+    }
+
+    @Override
+    public boolean existPotById(Long potId) {
+        return potRepository.existsById(potId);
     }
 }

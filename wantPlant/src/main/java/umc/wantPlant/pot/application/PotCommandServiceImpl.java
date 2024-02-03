@@ -1,16 +1,18 @@
 package umc.wantPlant.pot.application;
 
+import com.amazonaws.services.s3.AmazonS3;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import umc.wantPlant.apipayload.code.status.ErrorStatus;
-import umc.wantPlant.apipayload.exceptions.GeneralException;
 import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
 import umc.wantPlant.apipayload.exceptions.handler.PotHandler;
+import umc.wantPlant.completedPot.application.CompletedPotCommandService;
+import umc.wantPlant.file.config.AwsConfig;
+import umc.wantPlant.file.service.AmazonS3Service;
 import umc.wantPlant.garden.application.GardenQueryService;
 import umc.wantPlant.garden.domain.Garden;
-import umc.wantPlant.garden.repository.GardenRepository;
 import umc.wantPlant.goal.application.GoalCommandService;
 import umc.wantPlant.goal.application.GoalQueryService;
 import umc.wantPlant.goal.domain.Goal;
@@ -21,7 +23,6 @@ import umc.wantPlant.pot.domain.enums.PotType;
 import umc.wantPlant.pot.repository.PotRepository;
 import umc.wantPlant.todo.application.TodoService;
 import umc.wantPlant.todo.domain.Todo;
-import umc.wantPlant.todo.repository.TodoRepository;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -36,20 +37,21 @@ public class PotCommandServiceImpl implements PotCommandService{
     private final GoalCommandService goalCommandService;
     private final GoalQueryService goalQueryService;
     private final TodoService todoService;
-
-//    private final AmazonS3 amazonS3; //todo 이미지 처리
+    private final CompletedPotCommandService completedPotCommandService;
+    private final AwsConfig awsConfig;
+    private final AmazonS3 amazonS3;
 
 
     @Override
     @Transactional
     public Pot createPot(PotRequestDTO.PostPotDTO request) {
         PotType potType = PotType.getRandom();
-        String keyName = "potType/"+potType+"-"+0;;
+        String keyName = "pot/"+potType.name().toLowerCase()+"-"+0;
         String potImgUrl = "";
-        //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
-
+        potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
 
         Garden garden = gardenQueryService.getGardenById(request.getGardenId());
+
         Pot newPot = Pot.builder()
                 .potName(request.getPotName())
                 .potType(potType)
@@ -57,7 +59,6 @@ public class PotCommandServiceImpl implements PotCommandService{
                 .potTagColor(request.getPotTageColor())
                 .potImageUrl(potImgUrl)
                 .startAt(request.getStartAt())
-                .completeAt(null)
                 .garden(garden)
                 .build();
 
@@ -67,10 +68,9 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override //앱용
     public Pot createPotGoalsTodos(PotRequestDTO.PostPotGoalTodoDTO request) {
         PotType potType = PotType.getRandom();
-        String keyName = "potType/"+potType+"-"+0;;
+        String keyName = "pot/"+potType.name().toLowerCase()+"-"+0;
         String potImgUrl = "";
-        //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
-
+        potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
 
         Garden garden = gardenQueryService.getGardenById(request.getGardenId());
 
@@ -81,7 +81,6 @@ public class PotCommandServiceImpl implements PotCommandService{
                 .potTagColor(PotTagColor.PURPLE)
                 .potImageUrl(potImgUrl)
                 .startAt(request.getStartAt())
-                .completeAt(null)
                 .garden(garden)
                 .build();
         potRepository.save(newPot);
@@ -96,38 +95,39 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override
     @Transactional
     public Pot updatePot(Long potId, PotRequestDTO.PatchPotDTO request) {
-        Pot pot = potRepository.findById(potId).orElseThrow(
-                ()->new PotHandler(ErrorStatus.POT_NOT_FOUND)
-        );
+        Pot pot = potRepository.findById(potId).get();
         pot.setPotName(request.getPotName());
         return potRepository.save(pot);
     }
 
     @Override
     @Transactional
-    public Pot updatePot(Todo todo) {
+    public Pot updatePotByTodo(Todo todo) {
         Pot pot = potRepository.findByPotId(todo.getGoal().getPot().getPotId()).get();
 
         //proceed update
         pot.updatePotProceed(todo.getIsComplete());
 
         //url update
-        String keyName = "potType/"+pot.getPotType()+"-"+0;;
+        String keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0;;
         String potImgUrl = "";
-        switch (pot.getProceed()/10){
-            case 0 -> keyName = "potType/"+pot.getPotType()+"-"+0;
-            case 1 -> keyName = "potType/"+pot.getPotType()+"-"+1;
-            case 2 -> keyName = "potType/"+pot.getPotType()+"-"+2;
-            case 3 -> keyName = "potType/"+pot.getPotType()+"-"+3;
+        switch (pot.getProceed()/15){
+            case 0 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0;
+            case 1 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+1;
+            case 2 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+2;
         }
-        //potImgUrl = amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();//todo 이미지 처리
+        potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
         pot.setPotImgUrl(potImgUrl);
 
-        //completedAt update
-        if(pot.getProceed() >= 30)
-            pot.setCompleteAt(LocalDate.now());
-        else
-            pot.setCompleteAt(null);
+        if(pot.getProceed() == 30) {//30개 되면 save
+            //완료한 화분으로 옮기기
+            completedPotCommandService.saveCompletedPotFromPot(pot);
+            //0으로 초기화 - 이미지도 변경
+            pot.setProceed(0);
+            keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0;
+            potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
+            pot.setPotImgUrl(potImgUrl);
+        }
 
         return potRepository.save(pot);
     }

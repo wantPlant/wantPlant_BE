@@ -17,10 +17,10 @@ public interface PotRepository extends JpaRepository<Pot, Long> {
     Page<Pot> findAllByGarden(Garden garden, PageRequest page);
     Optional<List<Pot>> findAllByStartAt(LocalDate startAt);
     Optional<Pot> findByPotId(Long potId);
-    @Query("select p from Pot p where p.garden = :garden and p.completeAt is not null")
-    Optional<List<Pot>> findAllCompletePotsByGarden(@Param("garden")Garden garden);
-
-    @Query("select p from Pot p where p.completeAt is not null")
-    Optional<List<Pot>> findAllByCompletedAt();
+//    @Query("select p from Pot p where p.garden = :garden and p.completeAt is not null")
+//    Optional<List<Pot>> findAllCompletePotsByGarden(@Param("garden")Garden garden);
+//
+//    @Query("select p from Pot p where p.completeAt is not null")
+//    Optional<List<Pot>> findAllByCompletedAt();
     void deleteByPotId(Long potId);
 }

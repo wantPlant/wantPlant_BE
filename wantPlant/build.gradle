@@ -27,7 +27,6 @@ dependencies {
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
-    implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final' // 최신 버전으로 업데이트 가능
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -36,6 +35,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     //AWS S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 }
 
 tasks.named('bootBuildImage') {
