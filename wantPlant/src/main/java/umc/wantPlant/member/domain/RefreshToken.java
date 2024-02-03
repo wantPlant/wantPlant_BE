@@ -18,4 +18,10 @@ public class RefreshToken {
 
     @Column(nullable = false)
     private String refreshToken;
+
+    public RefreshToken update(String newRefreshToken) {
+        this.refreshToken = newRefreshToken;
+
+        return this;
+    }
 }
