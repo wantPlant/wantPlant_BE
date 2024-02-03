@@ -59,7 +59,7 @@ public class PotQueryServiceImpl implements PotQueryService{
                 .build();
     }
 
-    @Override
+    @Override //화분 페이징
     public PotResponseDTO.GetPotsResultDTO getPotsByGardenId(Long gardenId, int page) {
         Page<Pot> pots = potRepository.findAllByGarden(gardenQueryService.getGardenById(gardenId)
                 , PageRequest.of(page, 4));
@@ -69,6 +69,7 @@ public class PotQueryServiceImpl implements PotQueryService{
                 PotResponseDTO.PotDTO.builder()
                         .potId(pot.getPotId())
                         .potName(pot.getPotName())
+                        .potTagColor(pot.getPotTagColor())
                         .proceed(pot.getProceed()%30)
                         .potImageUrl(pot.getPotImageUrl())
                         .startAt(pot.getStartAt())
@@ -117,6 +118,7 @@ public class PotQueryServiceImpl implements PotQueryService{
                 .gardenName(pot.getGarden().getName())
                 .potId(pot.getPotId())
                 .potName(pot.getPotName())
+                .potTagColor(pot.getPotTagColor())
                 .proceed(pot.getProceed()%30)
                 .potImageUrl(pot.getPotImageUrl())
                 .build();

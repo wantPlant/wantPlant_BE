@@ -76,6 +76,7 @@ public class PotResponseDTO {
     public static class PotDTO{
         Long potId;
         String potName;
+        PotTagColor potTagColor;
         int proceed;
         String potImageUrl;
         LocalDate startAt;
@@ -115,6 +116,7 @@ public class PotResponseDTO {
         String gardenName;
         Long potId;
         String potName;
+        PotTagColor potTagColor;
         int proceed;
         String potImageUrl;
     }
