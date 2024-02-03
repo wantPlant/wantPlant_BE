@@ -11,7 +11,7 @@ import umc.wantPlant.pot.validation.annotation.ExistPot;
 
 @Component
 @RequiredArgsConstructor
-public class CheckPageValidator implements ConstraintValidator<CheckPage, Long> {
+public class CheckPageValidator implements ConstraintValidator<CheckPage, Integer> {
 
     @Override
     public void initialize(CheckPage constraintAnnotation) {
@@ -19,7 +19,7 @@ public class CheckPageValidator implements ConstraintValidator<CheckPage, Long> 
     }
 
     @Override
-    public boolean isValid(Long value, ConstraintValidatorContext context) {
+    public boolean isValid(Integer value, ConstraintValidatorContext context) {
         if(value<=0) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(ErrorStatus.PAGE_NOT_FOUND.toString()).addConstraintViolation();
