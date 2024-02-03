@@ -1,0 +1,8 @@
+##goal post
+POST http://localhost:8080/api/goals
+Content-Type: application/json
+
+{
+  "potId": 2,
+  "goalTitle" : null
+}

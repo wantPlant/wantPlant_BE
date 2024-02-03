@@ -4,8 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import umc.wantPlant.apipayload.ApiResponse;
 import umc.wantPlant.apipayload.code.status.ErrorStatus;
@@ -16,11 +18,15 @@ import umc.wantPlant.pot.application.PotQueryService;
 import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
 import umc.wantPlant.pot.domain.dto.PotResponseDTO;
+import umc.wantPlant.pot.validation.annotation.CheckPage;
+import umc.wantPlant.pot.validation.annotation.ExistGarden;
+import umc.wantPlant.pot.validation.annotation.ExistPot;
 
 import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/api/pots")
 public class PotController {
     private final PotCommandService potCommandService;
@@ -31,7 +37,7 @@ public class PotController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
-    public ApiResponse<String> postPot(@RequestBody PotRequestDTO.PostPotDTO request){
+    public ApiResponse<String> postPot(@Valid @RequestBody PotRequestDTO.PostPotDTO request){
         Pot newPot = potCommandService.createPot(request);
 
         return ApiResponse.onSuccess(newPot.getPotId()+"번 화분이 정상적으로 생성되었습니다.");
@@ -42,7 +48,7 @@ public class PotController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
-    public ApiResponse<String> postPotGoalTodo(@RequestBody PotRequestDTO.PostPotGoalTodoDTO request){
+    public ApiResponse<String> postPotGoalTodo(@Valid @RequestBody PotRequestDTO.PostPotGoalTodoDTO request){
         Pot newPot = potCommandService.createPotGoalsTodos(request);
         return ApiResponse.onSuccess(newPot.getPotId()+" 화분이 정상적으로 생성되었습니다.");
     }
@@ -54,7 +60,7 @@ public class PotController {
     })
     @Parameter(name = "gardenId", description = "Query String으로 정원 ID를 주세요")
     public ApiResponse<PotResponseDTO.GetPotNamesResultDTO> getPotNames(
-            @RequestParam(name = "gardenId") Long gardenId){
+            @ExistGarden @RequestParam(name = "gardenId") Long gardenId){
 
         return ApiResponse.onSuccess(potQueryService.getPotNamesByGardenId(gardenId));
     }
@@ -66,7 +72,7 @@ public class PotController {
     })
     @Parameter(name = "gardenId", description = "Query String으로 정원 ID를 주세요")
     public ApiResponse<PotResponseDTO.GetPotImagesResultDTO> getPotImages(
-            @RequestParam(name = "gardenId") Long gardenId){
+            @ExistGarden @RequestParam(name = "gardenId") Long gardenId){
         return ApiResponse.onSuccess(potQueryService.getPotImagesByGardenId(gardenId));
     }
 
@@ -80,8 +86,8 @@ public class PotController {
             @Parameter(name = "page", description = "Query String으로 page번호(>=1)를 주세요")
     })
     public ApiResponse<PotResponseDTO.GetPotsResultDTO> getPots(
-            @RequestParam(name = "gardenId") Long gardenId,
-            @RequestParam(name = "page") int page){
+            @ExistGarden @RequestParam(name = "gardenId") Long gardenId,
+            @CheckPage  @RequestParam(name = "page") int page){
         return ApiResponse.onSuccess(potQueryService.getPotsByGardenId(gardenId, page-1));
     }
 
@@ -104,29 +110,8 @@ public class PotController {
     })
     @Parameter(name = "potId", description = "PathVariable로 potId를 주세요")
     public ApiResponse<PotResponseDTO.GetPotDetailResultDTO> getPotDetail(
-            @PathVariable(name = "potId")Long potId){
+            @ExistPot @PathVariable(name = "potId")Long potId){
         return ApiResponse.onSuccess(potQueryService.getPotDetailByPotId(potId));
-    }
-
-    @GetMapping ("/completed/app")
-    @Operation(summary = "[앱] 완료한 화분 리스트 조회 API", description = "완료한 화분 리스트를 조회하는 API입니다. 도감에 사용하시면 됩니다.")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
-    })
-    @Parameter(name = "gardenId", description = "Query String으로 gardenId를 주세요")
-    public ApiResponse<PotResponseDTO.GetCompletedPotsResultDTO> getCompletedPots(
-            @RequestParam(name = "gardenId") Long gardenId
-    ){
-        return ApiResponse.onSuccess(potQueryService.getCompletedPotsByGardenId(gardenId));
-    }
-
-    @GetMapping ("/completed/web")
-    @Operation(summary = "[웹] 완료한 화분 리스트 조회 API", description = "완료한 화분 리스트를 조회하는 API입니다. 도감에 사용하시면 됩니다.")
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
-    })
-    public ApiResponse<PotResponseDTO.GetCompletedPotsForWebResultDTO> getCompletedPotsForWeb(){
-        return ApiResponse.onSuccess(potQueryService.getCompletedPotsForWeb());
     }
 
     @PatchMapping("/{potId}")
@@ -138,8 +123,8 @@ public class PotController {
             @Parameter(name = "potId", description = "Path Variable로 potId를 주세요")
     })
     public ApiResponse<String> patchPot(
-            @PathVariable(name = "potId") Long potId,
-            @RequestBody PotRequestDTO.PatchPotDTO request){
+            @ExistPot @PathVariable(name = "potId") Long potId,
+            @Valid @RequestBody PotRequestDTO.PatchPotDTO request){
         Pot pot = potCommandService.updatePot(potId, request);
         return ApiResponse.onSuccess(pot.getPotId()+"번 화분이 정상적으로 수정되었습니다.");
     }
@@ -150,7 +135,7 @@ public class PotController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
     })
     @Parameter(name = "potId", description = "Path Variable로 potId를 주세요")
-    public ApiResponse<String> deletePot(@PathVariable(name = "potId") Long potId){
+    public ApiResponse<String> deletePot(@ExistPot @PathVariable(name = "potId") Long potId){
         try {
             potCommandService.deletePot(potId);
         }catch(GeneralException e){

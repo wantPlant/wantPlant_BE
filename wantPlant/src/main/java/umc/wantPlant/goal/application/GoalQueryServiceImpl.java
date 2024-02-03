@@ -2,6 +2,8 @@ package umc.wantPlant.goal.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import umc.wantPlant.apipayload.code.status.ErrorStatus;
+import umc.wantPlant.apipayload.exceptions.handler.GoalHandler;
 import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.goal.domain.dto.GoalRequestDTO;
 import umc.wantPlant.goal.domain.dto.GoalResponseDTO;
@@ -51,5 +53,10 @@ public class GoalQueryServiceImpl implements GoalQueryService {
     @Override
     public List<Goal> findAllByPot(Pot pot) {
         return goalRepository.findAllByPot(pot).get();
+    }
+
+    @Override
+    public boolean existGoalById(Long goalId) {
+        return goalRepository.existsById(goalId);
     }
 }

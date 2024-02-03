@@ -1,6 +1,7 @@
 package umc.wantPlant.garden.domain.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import umc.wantPlant.garden.domain.enums.GardenCategories;
 
@@ -12,20 +13,18 @@ public class GardenRequestDTO {
 		@NotBlank
 		private String name;
 
-		@NotBlank
 		private String description;
-
 		@NotBlank
 		private String category;
 	}
 
 	@Getter
 	public static class UpdateGardenDTO {
+		@NotNull
+		private Long id;
 
-		@NotBlank
 		private String name;
 
-		@NotBlank
 		private String description;
 	}
 }

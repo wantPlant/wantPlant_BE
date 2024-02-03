@@ -12,7 +12,6 @@ public interface PotQueryService {
     public PotResponseDTO.GetPotsResultDTO getPotsByGardenId(Long gardenId, int page);
     public PotResponseDTO.GetCategoryPotTodoPerDateDTO getCategoryPotTodoByDate(LocalDate date);
     public PotResponseDTO.GetPotDetailResultDTO getPotDetailByPotId(Long potId);
-    public PotResponseDTO.GetCompletedPotsResultDTO getCompletedPotsByGardenId(Long gardenId);
-    public PotResponseDTO.GetCompletedPotsForWebResultDTO getCompletedPotsForWeb();
     public Pot getPotByPotId(Long potId);
+    public boolean existPotById(Long potId);
 }

@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import umc.wantPlant.apipayload.code.status.ErrorStatus;
+import umc.wantPlant.apipayload.exceptions.handler.TodoHandler;
 import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.goal.domain.dto.GoalRequestDTO;
 import umc.wantPlant.pot.application.PotCommandService;
@@ -27,9 +29,11 @@ import java.util.stream.Collectors;
 @Service
 public class TodoService {
     private final TodoRepository todoRepository;
+//    private final PotCommandService potCommandService;
+
     private PotCommandService potCommandService;
 
-    @Autowired //순환참조때문에 setter로 주입 ->
+    @Autowired //순환참조때문에 setter로 주입 -> 양방향으로 해결하는게 제일 깔끔할 것
     public void setPotCommandService(@Lazy PotCommandService potCommandService){
         this.potCommandService = potCommandService;
     }
@@ -94,10 +98,12 @@ public class TodoService {
         Todo todo = getTodoById(todoId);
 
         Boolean newIsComplete = updateCompleteDTO.getIsComplete();
-
-        todo.updateTodoComplete(newIsComplete);
-        todoRepository.save(todo);
-        potCommandService.updatePot(todo);
+        //false -> false 등 같은 값으로 바뀔땐 실행 x
+        if(newIsComplete != todo.getIsComplete()) {
+            todo.updateTodoComplete(newIsComplete);
+            todoRepository.save(todo);
+            potCommandService.updatePotByTodo(todo);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -143,11 +149,8 @@ public class TodoService {
     }
     //potService에서 요청
     //처음 생성된 두개 투두 조회
-    public List<PotResponseDTO.TodoDTO> getFirstTwoTodo(Pot pot){
-        return todoRepository.findFirstTwoTodoByPot(pot.getPotId()).get().stream().map(todoTitle ->
-                PotResponseDTO.TodoDTO.builder()
-                        .todoTitle(todoTitle)
-                        .build()).collect(Collectors.toList());
+    public List<String> getFirstTwoTodo(Pot pot){
+        return todoRepository.findFirstTwoTodoByPot(pot.getPotId()).get();
     }
     //goal로 하위 todos지우기
     public void deleteTodosByGoal(Goal goal){

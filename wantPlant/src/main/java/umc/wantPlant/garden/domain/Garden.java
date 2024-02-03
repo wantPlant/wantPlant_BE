@@ -30,8 +30,8 @@ public class Garden {
 	@Column(nullable = false, length = 20)
 	private String name;
 
-	@Column(nullable = false, length = 40)
-	private String description;
+	@Column(length = 40)
+	private String description=" ";
 
 	@Enumerated(EnumType.STRING)
 	private GardenCategories category;
