@@ -35,7 +35,6 @@ public class Todo {
         this.time = time;
         this.startAt = LocalDateTime.of(date, time);
     }
-
     public void updateTodoTitle(String title){this.title = title;}
     public void updateTodoDate(LocalDate date){
         this.date = date;
