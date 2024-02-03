@@ -11,8 +11,6 @@ import umc.wantPlant.member.domain.dto.response.MemberGenerateTokenResponseDTO;
 import umc.wantPlant.member.domain.dto.response.MemberLoginResponseDTO;
 import umc.wantPlant.member.repository.MemberRepository;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -41,6 +39,18 @@ public class AuthService {
 
         return new MemberGenerateTokenResponseDTO(jwtTokenProvider.generateAccessToken(memberId));
     }
+
+    @Transactional
+    public MemberLoginResponseDTO testToken(){
+        Member member = Member.builder()
+                .nickname("testNickname")
+                .email("testEmail@test.com")
+                .profileImage("testProfileImage")
+                .build();
+
+        return getNewToken(memberRepository.save(member));
+    }
+
     private MemberLoginResponseDTO getNewToken(Member member) {
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId());
         refreshTokenService.saveTokenInfo(tokenInfo.getRefreshToken(), member.getId());

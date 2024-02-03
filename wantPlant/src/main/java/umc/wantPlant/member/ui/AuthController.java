@@ -24,4 +24,9 @@ public class AuthController {
         return ApiResponse.onSuccess(authService.generateNewAccessToken(requestDTO.getRefreshToken()));
     }
 
+    @PostMapping("/token/test")
+    public ApiResponse<MemberLoginResponseDTO> generateTestToken(){
+        return ApiResponse.onSuccess(authService.testToken());
+    }
+
 }
