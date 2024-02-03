@@ -94,6 +94,7 @@ public class PotQueryServiceImpl implements PotQueryService{
             Pot pot = todo.getGoal().getPot();
             return PotResponseDTO.TodoPerDateDTO.builder()
                     .category(pot.getGarden().getCategory())
+                    .gardenId(pot.getGarden().getId())
                     .potId(pot.getPotId())
                     .potName(pot.getPotName())
                     .potTagColor(pot.getPotTagColor())

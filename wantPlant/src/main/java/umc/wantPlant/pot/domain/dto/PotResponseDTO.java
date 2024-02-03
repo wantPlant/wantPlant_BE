@@ -96,6 +96,7 @@ public class PotResponseDTO {
     @AllArgsConstructor
     public static class TodoPerDateDTO{
         GardenCategories category;
+        Long gardenId;
         Long potId;
         String potName;
         PotTagColor potTagColor;
