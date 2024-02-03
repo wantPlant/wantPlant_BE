@@ -16,12 +16,14 @@ public class RefreshTokenService {
 
     @Transactional
     public RefreshToken saveTokenInfo(String refreshToken, Long memberId){
-        return refreshTokenRepository.save(
-                RefreshToken.builder()
-                        .memberId(memberId)
-                        .refreshToken(refreshToken)
-                        .build()
-        );
+        RefreshToken token = RefreshToken.builder()
+                .refreshToken(refreshToken)
+                .memberId(memberId)
+                .build();
+        RefreshToken getToken = refreshTokenRepository.findByMemberId(memberId)
+                .map(entity -> entity.update(token.getRefreshToken()))
+                .orElse(token);
+        return refreshTokenRepository.save(getToken);
     }
 
     @Transactional
