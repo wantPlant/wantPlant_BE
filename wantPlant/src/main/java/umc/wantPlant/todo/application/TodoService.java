@@ -133,9 +133,12 @@ public class TodoService {
         Todo todo = getTodoById(todoId);
 
         Boolean newIsComplete = updateCompleteDTO.getIsComplete();
-
-        todo.updateTodoComplete(newIsComplete);
-        potCommandService.updatePot(todo);
+        //false -> false 등 같은 값으로 바뀔땐 실행 x
+        if(newIsComplete != todo.getIsComplete()) {
+            todo.updateTodoComplete(newIsComplete);
+            todoRepository.save(todo);
+            potCommandService.updatePotByTodo(todo);
+        }
        return todoRepository.save(todo);
     }
 
@@ -184,12 +187,10 @@ public class TodoService {
         return todoRepository.findAllByStartDate(startDateMinTime, startDateMaxTime).get();
     }
     //potService에서 요청
+    //potService에서 요청
     //처음 생성된 두개 투두 조회
-    public List<PotResponseDTO.TodoDTO> getFirstTwoTodo(Pot pot){
-        return todoRepository.findFirstTwoTodoByPot(pot.getPotId()).get().stream().map(todoTitle ->
-                PotResponseDTO.TodoDTO.builder()
-                        .todoTitle(todoTitle)
-                        .build()).collect(Collectors.toList());
+    public List<String> getFirstTwoTodo(Pot pot){
+        return todoRepository.findFirstTwoTodoByPot(pot.getPotId()).get();
     }
     //goal로 하위 todos지우기
     public void deleteTodosByGoal(Goal goal){

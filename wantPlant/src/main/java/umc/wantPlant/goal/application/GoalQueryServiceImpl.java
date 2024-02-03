@@ -55,7 +55,10 @@ public class GoalQueryServiceImpl implements GoalQueryService {
     public List<Goal> findAllByPot(Pot pot) {
         return goalRepository.findAllByPot(pot).get();
     }
-
+    @Override
+    public boolean existGoalById(Long goalId) {
+        return goalRepository.existsById(goalId);
+    }
     @Override
     public Optional<Goal> getGoalById(Long goalId){return goalRepository.findById(goalId);}
 

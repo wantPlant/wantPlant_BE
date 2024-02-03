@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface GoalQueryService {
     public GoalResponseDTO.GetGoalsTodosByPotResultDTO getGoalsTodosByPot(Long potId);
     public List<Goal> findAllByPot(Pot pot);
-
-    Optional<Goal> getGoalById(Long goalId);
+    public boolean existGoalById(Long goalId);
+    public Optional<Goal> getGoalById(Long goalId);
 }
