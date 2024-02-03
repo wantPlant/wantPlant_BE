@@ -22,7 +22,7 @@ public class SwaggerConfig {
 				.description("WantPlan API 명세서")
 				.version("1.0.0");
 
-		String jwtSchemeName = "JWT TOKEN";
+		String jwtSchemeName = "Authorization";
 
 		// API 요청헤더에 인증정보 포함
 		SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
