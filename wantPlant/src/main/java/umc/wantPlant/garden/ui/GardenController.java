@@ -40,7 +40,7 @@ public class GardenController {
 
 	// 정원 생성 API
 	@PostMapping("")
-	@Operation(summary = "정원 생성 API", description = "정원을 생성하는 API입니다." + "리퀘스트 바디로 이름,설명,카테고리이름을 주세요")
+	@Operation(summary = "정원 생성 API", description = "정원을 생성하는 API입니다." + "리퀘스트 바디로 멤버 ID,이름,설명,카테고리이름을 주세요")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공")})
 	public ApiResponse<GardenResponseDTO.GardenCreatResultDTO> creat(
@@ -53,7 +53,7 @@ public class GardenController {
 
 	// 정원 수정 API
 	@PutMapping("")
-	@Operation(summary = "정원 이름,설명 수정 API", description = "정원의 이름과 설명을 수정하는 API입니다.")
+	@Operation(summary = "정원 이름,설명 수정 API", description = "정원의 이름과 설명을 수정하는 API입니다." + "리퀘스트 바디로 멤버 ID,이름,설명을 주세요")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN400", description = "정원을 찾을수 없습니다.")})
@@ -65,25 +65,29 @@ public class GardenController {
 		return ApiResponse.onSuccess(result);
 	}
 
-	@PatchMapping("/name")
-	@Operation(summary = "정원 이름 수정 API", description = "정원의 이름을 수정하는 API입니다. 바꿀 정원의 이름 정보를 주세요, querystring 입니다!")
+	@PatchMapping("/{memberId}/name")
+	@Operation(summary = "정원 이름 수정 API", description = "정원의 이름을 수정하는 API입니다.")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN400", description = "정원을 찾을수 없습니다.")})
+	@Parameter(name = "memberId",description = "유저정보를 주세요, Query Parameter입니다" )
 	public ApiResponse<GardenResponseDTO.GardenUpdateResultDTO> updateGardenName(
-		@RequestBody @Valid GardenRequestDTO.UpdateGardenDTO update) {
+		@RequestBody @Valid GardenRequestDTO.UpdateGardenDTO update,
+		@RequestParam Long memberId) {
 		GardenResponseDTO.GardenUpdateResultDTO result = gardenCommandService.updateName(update);
 
 		return ApiResponse.onSuccess(result);
 	}
 
-	@PatchMapping("/description")
-	@Operation(summary = "정원 설명 수정 API", description = "정원의 설명을 수정하는 API입니다. , query String 으로 page 번호를 주세요")
+	@PatchMapping("/{memberId}/description")
+	@Operation(summary = "정원 설명 수정 API", description = "정원의 설명을 수정하는 API입니다.")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN400", description = "정원을 찾을수 없습니다.")})
+	@Parameter(name = "memberId",description = "유저정보를 주세요, Query Parameter입니다" )
 	public ApiResponse<GardenResponseDTO.GardenUpdateResultDTO> updateGardenDescription(
-		@RequestBody @Valid GardenRequestDTO.UpdateGardenDTO update) {
+		@RequestBody @Valid GardenRequestDTO.UpdateGardenDTO update,
+		@RequestParam Long memberId) {
 
 		GardenResponseDTO.GardenUpdateResultDTO result = gardenCommandService.updateDescription(update);
 
@@ -96,9 +100,9 @@ public class GardenController {
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN401", description = "정원이 하나도 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))})
-
+	@Parameter(name = "memberId",description = "유저정보를 주세요, Query Parameter입니다" )
 	public ApiResponse<GardenResponseDTO.GardenListDTO> getGardenPage(@PathVariable Integer page,
-		@PathVariable Integer pageSize) {
+		@PathVariable Integer pageSize ,@RequestParam Long memberId) {
 		// Garden valid
 		Long count = gardenQueryService.getGardenSize();
 		page = (page == 0) ? 0 : page - 1;
@@ -108,14 +112,14 @@ public class GardenController {
 		return ApiResponse.onSuccess(result);
 	}
 
-	@GetMapping("")
-	@Operation(summary = "모든 정원 조회 API", description = "모든 정원을 조회하는 API입니다.")
+	@GetMapping("/{memberId}")
+	@Operation(summary = "내 모든 정원 조회 API", description = "모든 정원을 조회하는 API입니다. 리스트형태로 반환합니다.")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN400", description = "정원을 찾을수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN401", description = "정원이 하나도 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))})
-
-	public ApiResponse<GardenResponseDTO.GardenResultList> getGardenList() {
+	@Parameter(name = "memberId",description = "유저정보를 주세요, Query Parameter입니다")
+	public ApiResponse<GardenResponseDTO.GardenResultList> getGardenList(@RequestParam Long memberId) {
 		// Garden valid
 		Long count = gardenQueryService.getGardenSize();
 
@@ -123,12 +127,13 @@ public class GardenController {
 		return ApiResponse.onSuccess(result);
 	}
 
-	@GetMapping("/category")
+	@GetMapping("/{memberId}/category")
 	@Operation(summary = "특정 카테고리 정원 조회 API", description = "특정 카테고리의 정원을 조회하는 API입니다.,")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN400", description = "정원을 찾을수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN401", description = "정원이 하나도 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))})
+	@Parameter(name = "memberId",description = "유저정보를 주세요, Query Parameter입니다")
 	public ApiResponse<GardenResponseDTO.GardenListDTO> getGardensByCategory(@RequestParam String category,
 		@RequestParam Integer page, @RequestParam Integer pageSize) {
 
@@ -141,11 +146,12 @@ public class GardenController {
 		return ApiResponse.onSuccess(result);
 	}
 
-	@GetMapping("/count")
+	@GetMapping("/{memberId}/count")
 	@Operation(summary = " 정원 개수 조회 API", description = "정원의 총 개수를 조회하는 API입니다.,")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN401", description = "정원이 하나도 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))})
+	@Parameter(name = "memberId",description = "유저정보를 주세요, Query Parameter입니다")
 	public ApiResponse<String> getGardensCount() {
 		Long count = gardenQueryService.getGardenSize();
 
@@ -153,13 +159,17 @@ public class GardenController {
 	}
 
 	//정원 삭제 API
-	@DeleteMapping("/{gardenId}")
+	@DeleteMapping("/{memberId}/{gardenId}")
 	@Operation(summary = "정원 삭제 API", description = "정원을 삭제하는 API입니다.,")
 	@ApiResponses({
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
 		@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN400", description = "정원을 찾을수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))})
-	@Parameters({@Parameter(name = "gardenId", description = "정원의 번호를 주세요, path variable 입니다!")})
-	public ApiResponse<String> deleteGardenById(@PathVariable Long gardenId) {
+	@Parameters({
+		@Parameter(name = "gardenId", description = "정원의 번호를 주세요, path variable 입니다!"),
+		@Parameter(name = "memberId",description = "유저정보를 주세요, Query Parameter입니다")
+	})
+	public ApiResponse<String> deleteGardenById(@PathVariable Long gardenId,
+		@RequestParam Long memberId) {
 		gardenCommandService.delete(gardenId);
 		return ApiResponse.onSuccess("삭제성공");
 
