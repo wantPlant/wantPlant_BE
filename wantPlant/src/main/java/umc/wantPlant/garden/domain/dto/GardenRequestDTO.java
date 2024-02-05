@@ -1,5 +1,8 @@
 package umc.wantPlant.garden.domain.dto;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -21,6 +24,17 @@ public class GardenRequestDTO {
 		private Long memberId;
 	}
 
+	@Getter
+	public static class GardenPage {
+		@NotNull
+		Long memberID;
+		@NotBlank
+		String category;
+		@DecimalMin(value = "1")
+		Integer page;
+		@DecimalMin(value = "1")
+		Integer pageSize;
+	}
 	@Getter
 	public static class UpdateGardenDTO {
 		@NotNull
