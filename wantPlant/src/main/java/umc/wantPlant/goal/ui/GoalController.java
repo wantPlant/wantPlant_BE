@@ -67,7 +67,7 @@ public class GoalController {
     @Parameter(name = "potId", description = "Query String으로 potId를 주세요")
     public ApiResponse<GoalResponseDTO.GetGoalsTodosByDateAndPotResultDTO> getGoalsTodosPerPotAndDate(
         @RequestParam(name = "date") LocalDate date,
-        @RequestParam(name = "potId") Long potId
+        @ExistPot @RequestParam(name = "potId") Long potId
     ){
         return ApiResponse.onSuccess(goalQueryService.getGoalsTodosPerPotAndDate(date, potId));
     }

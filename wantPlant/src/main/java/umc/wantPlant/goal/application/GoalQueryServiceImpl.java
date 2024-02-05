@@ -54,13 +54,18 @@ public class GoalQueryServiceImpl implements GoalQueryService {
 
     @Override
     public GoalResponseDTO.GetGoalsTodosByDateAndPotResultDTO getGoalsTodosPerPotAndDate(LocalDate date, Long potId) {
+        List<Goal> goals = goalRepository.findAllByPotAndTodoDate(potId, date).get();
 
-        List<Todo> todos = todoService.getTodosByStartDateAndPot(date,potId);
-        List<GoalResponseDTO.GoalsByDateAndPot> goals = goalRepository.findAllByDate
+        List<GoalResponseDTO.GoalsByDateAndPot> goalDTO = goals.stream().map( goal ->
+            GoalResponseDTO.GoalsByDateAndPot.builder()
+                .goalId(goal.getGoalId())
+                .goalTitle(goal.getGoalTitle())
+                .todos(todoService.getTodosByDateAndGoal(date, goal))
+                .build()).collect(Collectors.toList());
 
         return GoalResponseDTO.GetGoalsTodosByDateAndPotResultDTO
             .builder()
-            .goals()
+            .goals(goalDTO)
             .build();
     }
 
