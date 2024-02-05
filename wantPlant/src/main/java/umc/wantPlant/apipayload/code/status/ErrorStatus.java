@@ -16,6 +16,9 @@ public enum ErrorStatus implements BaseErrorCode {
 	_FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 	TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트"),
 
+	//멤버
+	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"MEMBER400","존재하지 않는 회원입니다."),
+
 	//정원
 	GARDEN_NOT_FOUND(HttpStatus.NOT_FOUND, "GARDEN400", "정원을 찾을 수 없습니다"),
 	GARDEN_NOT_EXIST(HttpStatus.NOT_FOUND, "GARDEN401", "정원이 하나도 존재하지않습니다."),
