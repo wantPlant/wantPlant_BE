@@ -25,6 +25,10 @@ public interface GardenRepository extends JpaRepository<Garden, Long> {
 	@Query("DELETE FROM Garden g WHERE g = :garden")
 	void deleteGardenAndPots(@Param("garden") Garden garden);
 
+	List<Garden> findByUserIdAndId(Long userId, Long gardenId);
+
+
+
 
 
 }
