@@ -15,10 +15,10 @@ public interface GardenCommandService {
 
 	GardenResponseDTO.GardenUpdateResultDTO updateDescription(GardenRequestDTO.UpdateGardenDTO update);
 
+	GardenResponseDTO.GardenResultList getGardenList(Long memberId);
 	GardenResponseDTO.GardenListDTO getGardenList(Page<Garden> gardenPage);
-	GardenResponseDTO.GardenResultList getGardenList();
 
 	GardenResponseDTO.GardenResultDTO toGardenResultDTO(Garden garden);
 
-	void delete(Long gardenId);
+	void delete(Long memberId, Long gardenId);
 }

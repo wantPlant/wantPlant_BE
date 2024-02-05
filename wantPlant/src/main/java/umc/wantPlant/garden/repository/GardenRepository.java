@@ -15,9 +15,12 @@ import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.tag.domain.Tag;
 
 public interface GardenRepository extends JpaRepository<Garden, Long> {
-	Page<Garden> findAllGardensBy(PageRequest pageRequest);
+	Page<Garden> findAllGardensByMemberId(Long memberId,PageRequest pageRequest);
+	Page<Garden> findByMemberIdAndCategory(Long memberId,GardenCategories category, PageRequest pageRequest);
 
-	Page<Garden> findByCategory(GardenCategories category, PageRequest pageRequest);
+	List<Garden> findAllByMemberId(Long memberId);
+
+	Long countByMemberId(Long memberId);
 	@Query("SELECT p FROM Pot p WHERE (p.garden) = :garden")
 	List<Pot> findPotByGardenId(@Param("garden") Garden garden);
 
@@ -25,7 +28,7 @@ public interface GardenRepository extends JpaRepository<Garden, Long> {
 	@Query("DELETE FROM Garden g WHERE g = :garden")
 	void deleteGardenAndPots(@Param("garden") Garden garden);
 
-	List<Garden> findByUserIdAndId(Long userId, Long gardenId);
+	Garden findByMemberIdAndId(Long memberId, Long gardenId);
 
 
 

@@ -28,7 +28,7 @@ public class GardenRequestDTO {
 	public static class GardenPage {
 		@NotNull
 		Long memberID;
-		@NotBlank
+
 		String category;
 		@DecimalMin(value = "1")
 		Integer page;

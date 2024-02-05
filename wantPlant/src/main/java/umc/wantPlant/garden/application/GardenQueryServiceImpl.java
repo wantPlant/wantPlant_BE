@@ -1,6 +1,5 @@
 package umc.wantPlant.garden.application;
 
-
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -13,6 +12,7 @@ import umc.wantPlant.apipayload.code.status.ErrorStatus;
 import umc.wantPlant.apipayload.exceptions.handler.GardenCategoryHandler;
 import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
 import umc.wantPlant.garden.domain.Garden;
+import umc.wantPlant.garden.domain.dto.GardenRequestDTO;
 import umc.wantPlant.garden.domain.enums.GardenCategories;
 import umc.wantPlant.garden.repository.GardenRepository;
 
@@ -29,20 +29,30 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 	}
 
 	@Override
-	public Page<Garden> getGardens(Integer page, Integer pageSize) {
-		return gardenRepository.findAllGardensBy(PageRequest.of(page, pageSize));
+	public Page<Garden> getGardens(GardenRequestDTO.GardenPage getPage) {
+		// 내 모든 정원 조회하기  : 페이지
+
+		int page= getPage.getPage()<0?0:getPage.getPageSize()-1;
+
+		return gardenRepository.findAllGardensByMemberId(getPage.getMemberID(),PageRequest.of(page, getPage.getPageSize()));
 	}
 
 	@Override
-	public Page<Garden> getGardensByCategory(String category, Integer page, Integer pageSize) {
-		GardenCategories gardenCategory = getGardenCategory(category);
+	public Page<Garden> getGardensByCategory(GardenRequestDTO.GardenPage getPage) {
 
-		return gardenRepository.findByCategory(gardenCategory, PageRequest.of(page, pageSize));
+		//정원 카테고리 생성 및 유효성 검증
+		GardenCategories gardenCategory = getGardenCategory(getPage.getCategory());
+
+		//페이지 유효한 넘버로 변경
+		int page= getPage.getPage()==0?0:getPage.getPageSize()-1;
+
+		return gardenRepository.findByMemberIdAndCategory(getPage.getMemberID(),gardenCategory, PageRequest.of(page,
+			getPage.getPageSize()));
 	}
 
 	@Override
-	public Long getGardenSize() {
-		Long count = gardenRepository.count();
+	public Long getGardenSize(Long memberId) {
+		Long count = gardenRepository.countByMemberId(memberId);
 		if (count == 0)
 			throw new GardenHandler(ErrorStatus.GARDEN_NOT_EXIST);
 		return count;
