@@ -192,6 +192,11 @@ public class TodoService {
     public List<String> getFirstTwoTodo(Pot pot){
         return todoRepository.findFirstTwoTodoByPot(pot.getPotId()).get();
     }
+    //goalQueryService에서 요청
+    //날짜와 화분으로 todos 조회
+    public List<Todo> getTodosByStartDateAndPot(LocalDate date, Long potId){
+        return null;
+    }
     //goal로 하위 todos지우기
     public void deleteTodosByGoal(Goal goal){
         List<Todo> todos = todoRepository.findAllByGoal(goal).get();

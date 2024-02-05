@@ -1,5 +1,7 @@
 package umc.wantPlant.goal.ui;
 
+import java.time.LocalDate;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,6 +16,7 @@ import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.goal.domain.dto.GoalRequestDTO;
 import umc.wantPlant.goal.domain.dto.GoalResponseDTO;
 import umc.wantPlant.goal.validation.annotation.ExistGoal;
+import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 import umc.wantPlant.pot.validation.annotation.ExistPot;
 
 @RestController
@@ -53,6 +56,20 @@ public class GoalController {
     public ApiResponse<GoalResponseDTO.GetGoalsTodosByPotResultDTO> getGoalsTodosByPot(
             @ExistPot @RequestParam Long potId){
         return ApiResponse.onSuccess(goalQueryService.getGoalsTodosByPot(potId));
+    }
+
+    @GetMapping("/todos/date")
+    @Operation(summary = "날짜&화분별 goal & todo 리스트 조회 API", description = "날짜별 카테고리 & 화분 & todo 리스트 조회하는 API입니다.")
+    @ApiResponses({
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200",description = "OK, 성공"),
+    })
+    @Parameter(name = "date", description = "Query String으로 date(yyyy-mm-dd)를 주세요")
+    @Parameter(name = "potId", description = "Query String으로 potId를 주세요")
+    public ApiResponse<GoalResponseDTO.GetGoalsTodosByDateAndPotResultDTO> getGoalsTodosPerPotAndDate(
+        @RequestParam(name = "date") LocalDate date,
+        @RequestParam(name = "potId") Long potId
+    ){
+        return ApiResponse.onSuccess(goalQueryService.getGoalsTodosPerPotAndDate(date, potId));
     }
 
     @PatchMapping("/{goalId}")
