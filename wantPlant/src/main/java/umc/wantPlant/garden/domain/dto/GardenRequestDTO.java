@@ -16,6 +16,9 @@ public class GardenRequestDTO {
 		private String description;
 		@NotBlank
 		private String category;
+
+		@NotNull
+		private Long memberId;
 	}
 
 	@Getter
@@ -26,5 +29,8 @@ public class GardenRequestDTO {
 		private String name;
 
 		private String description;
+
+		@NotNull
+		private Long memberId;
 	}
 }
