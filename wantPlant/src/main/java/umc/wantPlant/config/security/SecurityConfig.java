@@ -12,9 +12,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import umc.wantPlant.config.security.jwt.JwtAuthenticationFilter;
 import umc.wantPlant.config.security.jwt.JwtExceptionFilter;
 import umc.wantPlant.config.security.jwt.JwtTokenProvider;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +43,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/**").authenticated()
                                 .anyRequest().permitAll()
                 )
+                .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig.defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                                 new AntPathRequestMatcher("/api/**")))
@@ -45,5 +51,15 @@ public class SecurityConfig {
                         JwtAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    CorsConfigurationSource apiConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.addAllowedHeader("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
