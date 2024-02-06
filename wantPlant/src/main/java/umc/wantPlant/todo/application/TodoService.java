@@ -15,6 +15,7 @@ import umc.wantPlant.garden.domain.dto.GardenResponseDTO;
 import umc.wantPlant.goal.application.GoalQueryService;
 import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.goal.domain.dto.GoalRequestDTO;
+import umc.wantPlant.goal.domain.dto.GoalResponseDTO;
 import umc.wantPlant.pot.application.PotCommandService;
 import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.pot.domain.dto.PotRequestDTO;
@@ -191,6 +192,20 @@ public class TodoService {
     //처음 생성된 두개 투두 조회
     public List<String> getFirstTwoTodo(Pot pot){
         return todoRepository.findFirstTwoTodoByPot(pot.getPotId()).get();
+    }
+    //goalQueryService에서 요청
+    //날짜와 화분으로 todos 조회
+    public List<GoalResponseDTO.TodosByDateAndPot> getTodosByDateAndGoal(LocalDate date, Goal goal){
+        List<Todo> todos = todoRepository.findAllByDateAndGoal(date, goal).get();
+
+        return todos.stream().map(todo->
+            GoalResponseDTO.TodosByDateAndPot.builder()
+                .todoId(todo.getId())
+                .todoTitle(todo.getTitle())
+                .date(todo.getDate())
+                .time(todo.getTime())
+                .isComplete(todo.getIsComplete())
+                .build()).collect(Collectors.toList());
     }
     //goal로 하위 todos지우기
     public void deleteTodosByGoal(Goal goal){

@@ -32,4 +32,6 @@ public interface TodoRepository extends JpaRepository <Todo,Long>{
             "         order by t.startAt" +
             "         limit 2")
     Optional<List<String>> findFirstTwoTodoByPot(@Param("potId") Long potId);
+
+    Optional<List<Todo>> findAllByDateAndGoal(LocalDate date, Goal goal);
 }

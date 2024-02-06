@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class GoalResponseDTO {
+    //화분당 목표 투두 조회
     @Getter
     @Builder
     public static class GetGoalsTodosByPotResultDTO{
@@ -25,6 +26,31 @@ public class GoalResponseDTO {
     @Getter
     @Builder
     public static class TodoDTO{
+        Long todoId;
+        String todoTitle;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        LocalDate date;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "kk:mm", timezone = "Asia/Seoul")
+        LocalTime time;
+        Boolean isComplete;
+    }
+
+    //화분&시간당 목표 todos 조회
+    @Getter
+    @Builder
+    public static class GetGoalsTodosByDateAndPotResultDTO{
+        List<GoalsByDateAndPot> goals;
+    }
+    @Getter
+    @Builder
+    public static class GoalsByDateAndPot{
+        Long goalId;
+        String goalTitle;
+        List<TodosByDateAndPot> todos;
+    }
+    @Getter
+    @Builder
+    public static class TodosByDateAndPot{
         Long todoId;
         String todoTitle;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")

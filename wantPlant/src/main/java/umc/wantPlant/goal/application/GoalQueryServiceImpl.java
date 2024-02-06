@@ -11,6 +11,7 @@ import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.todo.application.TodoService;
 import umc.wantPlant.todo.domain.Todo;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,6 +50,23 @@ public class GoalQueryServiceImpl implements GoalQueryService {
         return GoalResponseDTO.GetGoalsTodosByPotResultDTO.builder()
                 .goalList(goalDTOS)
                 .build();
+    }
+
+    @Override
+    public GoalResponseDTO.GetGoalsTodosByDateAndPotResultDTO getGoalsTodosPerPotAndDate(LocalDate date, Long potId) {
+        List<Goal> goals = goalRepository.findAllByPotAndTodoDate(potId, date).get();
+
+        List<GoalResponseDTO.GoalsByDateAndPot> goalDTO = goals.stream().map( goal ->
+            GoalResponseDTO.GoalsByDateAndPot.builder()
+                .goalId(goal.getGoalId())
+                .goalTitle(goal.getGoalTitle())
+                .todos(todoService.getTodosByDateAndGoal(date, goal))
+                .build()).collect(Collectors.toList());
+
+        return GoalResponseDTO.GetGoalsTodosByDateAndPotResultDTO
+            .builder()
+            .goals(goalDTO)
+            .build();
     }
 
     @Override
