@@ -5,8 +5,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class MemberLoginResponseDTO {
+public class MemberInfoResponseDTO {
     private Long id;
-    private String accessToken;
-    private String refreshToken;
+    private String email;
+    private String nickname;
+    private String profileImage;
 }
