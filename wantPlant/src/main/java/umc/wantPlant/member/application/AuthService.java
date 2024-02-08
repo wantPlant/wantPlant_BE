@@ -56,6 +56,7 @@ public class AuthService {
     public String deleteRefreshToken(Member member){
         RefreshToken refreshToken = refreshTokenService.findByMemberId(member.getId())
                 .orElseThrow( () -> new RuntimeException());
+        refreshTokenService.delete(refreshToken);
         return "로그아웃 성공";
     }
 
