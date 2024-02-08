@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import umc.wantPlant.apipayload.ApiResponse;
+import umc.wantPlant.config.security.oauth.CurrentMember;
 import umc.wantPlant.member.application.AuthService;
+import umc.wantPlant.member.domain.Member;
 import umc.wantPlant.member.domain.dto.request.MemberGenerateTokenRequestDTO;
 import umc.wantPlant.member.domain.dto.response.MemberGenerateTokenResponseDTO;
 import umc.wantPlant.member.domain.dto.response.MemberLoginResponseDTO;
@@ -33,4 +35,9 @@ public class AuthController {
         return ApiResponse.onSuccess(authService.testToken());
     }
 
+    @DeleteMapping("/logout")
+    @Operation(summary = "로그아웃 API", description = "refreshToken을 삭제하는 API")
+    public ApiResponse<String> logout(@CurrentMember Member member){
+        return ApiResponse.onSuccess(authService.deleteRefreshToken(member));
+    }
 }
