@@ -7,6 +7,7 @@ import umc.wantPlant.config.security.jwt.JwtTokenProvider;
 import umc.wantPlant.config.security.jwt.TokenInfo;
 import umc.wantPlant.member.client.KakaoMemberClient;
 import umc.wantPlant.member.domain.Member;
+import umc.wantPlant.member.domain.RefreshToken;
 import umc.wantPlant.member.domain.dto.response.MemberGenerateTokenResponseDTO;
 import umc.wantPlant.member.domain.dto.response.MemberLoginResponseDTO;
 import umc.wantPlant.member.repository.MemberRepository;
@@ -49,6 +50,13 @@ public class AuthService {
                 .build();
 
         return getNewToken(memberRepository.save(member));
+    }
+
+    @Transactional
+    public String deleteRefreshToken(Member member){
+        RefreshToken refreshToken = refreshTokenService.findByMemberId(member.getId())
+                .orElseThrow( () -> new RuntimeException());
+        return "로그아웃 성공";
     }
 
     private MemberLoginResponseDTO getNewToken(Member member) {
