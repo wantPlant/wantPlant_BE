@@ -2,6 +2,8 @@ package umc.wantPlant.completedPot.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.pot.domain.enums.PotTagColor;
@@ -42,5 +44,6 @@ public class CompletedPot {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "garden_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Garden garden;
 }

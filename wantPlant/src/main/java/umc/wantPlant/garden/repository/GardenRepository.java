@@ -30,8 +30,4 @@ public interface GardenRepository extends JpaRepository<Garden, Long> {
 
 	Garden findByMemberIdAndId(Long memberId, Long gardenId);
 
-
-
-
-
 }

@@ -2,6 +2,8 @@ package umc.wantPlant.pot.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.pot.domain.enums.PotTagColor;
 import umc.wantPlant.pot.domain.enums.PotType;
@@ -39,6 +41,7 @@ public class Pot {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "garden_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Garden garden;
 
     public void setPotName(String potName){
