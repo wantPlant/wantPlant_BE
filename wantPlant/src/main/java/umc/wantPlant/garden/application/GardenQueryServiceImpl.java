@@ -1,5 +1,6 @@
 package umc.wantPlant.garden.application;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -13,8 +14,13 @@ import umc.wantPlant.apipayload.exceptions.handler.GardenCategoryHandler;
 import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.domain.dto.GardenRequestDTO;
+import umc.wantPlant.garden.domain.dto.GardenResponseDTO;
 import umc.wantPlant.garden.domain.enums.GardenCategories;
 import umc.wantPlant.garden.repository.GardenRepository;
+import umc.wantPlant.member.domain.Member;
+import umc.wantPlant.pot.domain.Pot;
+import umc.wantPlant.pot.domain.dto.PotResponseDTO;
+import umc.wantPlant.pot.repository.PotRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -29,43 +35,31 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 	}
 
 	@Override
-	public Page<Garden> getGardens(GardenRequestDTO.GardenPage getPage) {
-		// 내 모든 정원 조회하기  : 페이지
+	public Page<Garden> getGardensToPage(int page, Member member) {
 
-		int page= getPage.getPage()<0?0:getPage.getPageSize()-1;
+		page = page == 0 ? 0 : page - 1;
 
-		return gardenRepository.findAllGardensByMemberId(getPage.getMemberID(),PageRequest.of(page, getPage.getPageSize()));
+		return gardenRepository.findAllGardensByMember(member, PageRequest.of(page, 5));
 	}
 
 	@Override
-	public Page<Garden> getGardensByCategory(GardenRequestDTO.GardenPage getPage) {
+	public Page<Garden> getGardensByCategoryToPage(int page, Member member, GardenCategories gardenCategories) {
 
-		//정원 카테고리 생성 및 유효성 검증
-//		GardenCategories gardenCategory = getGardenCategory(getPage.getCategory());
+		page = page == 0 ? 0 : page - 1;
 
-		//페이지 유효한 넘버로 변경
-		int page= getPage.getPage()==0?0:getPage.getPageSize()-1;
-
-		return gardenRepository.findByMemberIdAndCategory(getPage.getMemberID(),getPage.getCategory(), PageRequest.of(page,
-			getPage.getPageSize()));
+		return gardenRepository.findByMemberAndCategory(member, gardenCategories,
+			PageRequest.of(page, 5));
 	}
 
 	@Override
-	public Long getGardenSize(Long memberId) {
-		Long count = gardenRepository.countByMemberId(memberId);
+	public Long getGardenSize(Member member) {
+		Long count = gardenRepository.countByMember(member);
+
 		if (count == 0)
 			throw new GardenHandler(ErrorStatus.GARDEN_NOT_EXIST);
+
 		return count;
 	}
-
-//	@Override
-//	public GardenCategories getGardenCategory(GardenCategories category) {
-//		try {
-//			return GardenCategories.valueOf(category);
-//		} catch (IllegalArgumentException e) {
-//			throw new GardenCategoryHandler(ErrorStatus.GARDEN_CATEGORY_NOT_FOUND);
-//		}
-//	}
 
 	public boolean existGardenById(Long gardenId) {
 		return gardenRepository.existsById(gardenId);
