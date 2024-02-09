@@ -17,7 +17,7 @@ public interface GardenQueryService {
 
 	Long getGardenSize(Long memberId);
 
-	GardenCategories getGardenCategory(String category);
+//	GardenCategories getGardenCategory(GardenCategories category);
 
 	boolean existGardenById(Long gardenId);
 }
