@@ -118,7 +118,7 @@ public class GardenControllerTemp {
     }
 
     //정원 삭제 API
-    @DeleteMapping("/{memberId}/{gardenId}")
+    @DeleteMapping("/{gardenId}")
     @Operation(summary = "정원 삭제 API", description = "정원을 삭제하는 API입니다.,")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),

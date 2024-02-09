@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import umc.wantPlant.goal.domain.Goal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,5 +52,6 @@ public class Todo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="GOAL_ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Goal goal;
 }
