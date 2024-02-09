@@ -24,15 +24,17 @@ import lombok.RequiredArgsConstructor;
 import umc.wantPlant.apipayload.ApiResponse;
 import umc.wantPlant.apipayload.code.status.ErrorStatus;
 import umc.wantPlant.apipayload.exceptions.handler.GardenHandler;
+import umc.wantPlant.config.security.oauth.CurrentMember;
 import umc.wantPlant.garden.application.GardenCommandService;
 import umc.wantPlant.garden.application.GardenQueryService;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.domain.dto.GardenRequestDTO;
 import umc.wantPlant.garden.domain.dto.GardenResponseDTO;
+import umc.wantPlant.member.domain.Member;
 
-@RestController
+//@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/gardens")
+//@RequestMapping("/api/gardens")
 public class GardenController {
 
 	private final GardenCommandService gardenCommandService;
@@ -168,6 +170,21 @@ public class GardenController {
 		gardenCommandService.delete(memberId, gardenId);
 		return ApiResponse.onSuccess("삭제성공");
 
+	}
+
+	@GetMapping("/")
+	@Operation(summary = "내 모든 정원 조회 API", description = "모든 정원을 조회하는 API입니다. 리스트형태로 반환합니다.")
+	@ApiResponses({
+			@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+			@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN400", description = "정원을 찾을수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+			@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "GARDEN401", description = "정원이 하나도 존재하지 않습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))})
+	@Parameter(name = "memberId", description = "유저정보를 주세요, Query Parameter입니다")
+	public ApiResponse<GardenResponseDTO.GardenResultList> getMemberGardenList(@CurrentMember Member member) {
+		// Garden valid
+		Long count = gardenQueryService.getGardenSize(member.getId());
+
+		GardenResponseDTO.GardenResultList result = gardenCommandService.getGardenList(member.getId());
+		return ApiResponse.onSuccess(result);
 	}
 
 }

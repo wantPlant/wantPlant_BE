@@ -3,6 +3,7 @@ package umc.wantPlant.garden.application;
 import static java.util.stream.Collectors.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import umc.wantPlant.member.repository.MemberRepository;
 import umc.wantPlant.pot.application.PotCommandService;
 import umc.wantPlant.pot.application.PotCommandServiceImpl;
 import umc.wantPlant.pot.domain.Pot;
+import umc.wantPlant.pot.domain.dto.PotResponseDTO;
 import umc.wantPlant.pot.repository.PotRepository;
 
 @Service
@@ -45,8 +47,8 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	@Transactional
 	public GardenResponseDTO.GardenCreatResultDTO creat(GardenRequestDTO.GardenCreatDTO creat) {
 
-		//카테고리 생성
-		GardenCategories gardenCategories = queryService.getGardenCategory(creat.getCategory());
+//		//카테고리 생성
+//		GardenCategories gardenCategories = queryService.getGardenCategory(creat.getCategory());
 		//멤버 유효성 검증
 		Member member = memberRepository.findById(creat.getMemberId())
 			.orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
@@ -55,7 +57,7 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 		Garden newGarden = gardenRepository.save(Garden.builder()
 			.name(creat.getName())
 			.description(creat.getDescription())
-			.category(gardenCategories)
+			.category(creat.getCategory())
 			.member(member)
 			.build());
 		//정원 객체 ResponseDTO로 변경
@@ -146,12 +148,24 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 	public GardenResponseDTO.GardenResultDTO toGardenResultDTO(Garden garden) {
 		String category = garden.getCategory().toString();
 
+//		List<Pot> potList = gardenRepository.findPotByGardenId(garden);
+		List<Pot> pots = potRepository.findAllByGarden(garden).orElseThrow();
+
+		List<PotResponseDTO.PotDTO> potDTOS = pots.stream().map(pot->
+				PotResponseDTO.PotDTO.builder()
+						.potId(pot.getPotId())
+						.potName(pot.getPotName())
+						.proceed(pot.getProceed()%30)
+						.potImageUrl(pot.getPotImageUrl())
+						.startAt(pot.getStartAt())
+						.build()).toList();
+
 		return GardenResponseDTO.GardenResultDTO.builder()
 			.gardenId(garden.getId())
 			.name(garden.getName())
 			.description(garden.getDescription())
 			.gardenCategory(category)
-			.potList(gardenRepository.findPotByGardenId(garden))
+			.potList(potDTOS)
 			.build();
 	}
 
@@ -162,7 +176,6 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 		Long count = queryService.getGardenSize(memberId);
 
 		List<Garden> gardens = gardenRepository.findAllByMemberId(memberId);
-
 
 		List<GardenResponseDTO.GardenResultDTO> result = gardens.stream().map(this::toGardenResultDTO).toList();
 

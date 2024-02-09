@@ -41,12 +41,12 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 	public Page<Garden> getGardensByCategory(GardenRequestDTO.GardenPage getPage) {
 
 		//정원 카테고리 생성 및 유효성 검증
-		GardenCategories gardenCategory = getGardenCategory(getPage.getCategory());
+//		GardenCategories gardenCategory = getGardenCategory(getPage.getCategory());
 
 		//페이지 유효한 넘버로 변경
 		int page= getPage.getPage()==0?0:getPage.getPageSize()-1;
 
-		return gardenRepository.findByMemberIdAndCategory(getPage.getMemberID(),gardenCategory, PageRequest.of(page,
+		return gardenRepository.findByMemberIdAndCategory(getPage.getMemberID(),getPage.getCategory(), PageRequest.of(page,
 			getPage.getPageSize()));
 	}
 
@@ -58,14 +58,14 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 		return count;
 	}
 
-	@Override
-	public GardenCategories getGardenCategory(String category) {
-		try {
-			return GardenCategories.valueOf(category.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			throw new GardenCategoryHandler(ErrorStatus.GARDEN_CATEGORY_NOT_FOUND);
-		}
-	}
+//	@Override
+//	public GardenCategories getGardenCategory(GardenCategories category) {
+//		try {
+//			return GardenCategories.valueOf(category);
+//		} catch (IllegalArgumentException e) {
+//			throw new GardenCategoryHandler(ErrorStatus.GARDEN_CATEGORY_NOT_FOUND);
+//		}
+//	}
 
 	public boolean existGardenById(Long gardenId) {
 		return gardenRepository.existsById(gardenId);

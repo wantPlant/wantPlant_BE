@@ -18,7 +18,7 @@ public class GardenRequestDTO {
 
 		private String description;
 		@NotBlank
-		private String category;
+		private GardenCategories category;
 
 		@NotNull
 		private Long memberId;
@@ -29,7 +29,7 @@ public class GardenRequestDTO {
 		@NotNull
 		Long memberID;
 
-		String category;
+		GardenCategories category;
 		@DecimalMin(value = "1")
 		Integer page;
 		@DecimalMin(value = "1")
