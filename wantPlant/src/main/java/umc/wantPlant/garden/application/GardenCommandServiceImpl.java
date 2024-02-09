@@ -155,6 +155,7 @@ public class GardenCommandServiceImpl implements GardenCommandService {
 				PotResponseDTO.PotDTO.builder()
 						.potId(pot.getPotId())
 						.potName(pot.getPotName())
+						.potTagColor(pot.getPotTagColor())
 						.proceed(pot.getProceed()%30)
 						.potImageUrl(pot.getPotImageUrl())
 						.startAt(pot.getStartAt())
