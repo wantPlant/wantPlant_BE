@@ -5,13 +5,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import umc.wantPlant.garden.domain.enums.GardenCategories;
 
 public class GardenRequestDTO {
 
 	@Getter
-	public static class GardenCreatDTO {
+	@Builder
+	public static class GardenCreatRequestDTO {
 
 		@NotBlank
 		private String name;
@@ -19,32 +21,16 @@ public class GardenRequestDTO {
 		private String description;
 		@NotBlank
 		private GardenCategories category;
-
-		@NotNull
-		private Long memberId;
 	}
 
 	@Getter
-	public static class GardenPage {
+	@Builder
+	public static class GardenUpdateRequestDTO {
 		@NotNull
-		Long memberID;
-
-		GardenCategories category;
-		@DecimalMin(value = "1")
-		Integer page;
-		@DecimalMin(value = "1")
-		Integer pageSize;
-	}
-	@Getter
-	public static class UpdateGardenDTO {
-		@NotNull
-		private Long id;
+		private Long gardenId;
 
 		private String name;
 
 		private String description;
-
-		@NotNull
-		private Long memberId;
 	}
 }
