@@ -11,23 +11,20 @@ import org.springframework.data.repository.query.Param;
 
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.garden.domain.enums.GardenCategories;
+import umc.wantPlant.member.domain.Member;
 import umc.wantPlant.pot.domain.Pot;
 import umc.wantPlant.tag.domain.Tag;
 
 public interface GardenRepository extends JpaRepository<Garden, Long> {
-	Page<Garden> findAllGardensByMemberId(Long memberId,PageRequest pageRequest);
-	Page<Garden> findByMemberIdAndCategory(Long memberId,GardenCategories category, PageRequest pageRequest);
+	Page<Garden> findAllGardensByMember(Member member,PageRequest pageRequest);
+	Page<Garden> findByMemberAndCategory(Member member,GardenCategories category, PageRequest pageRequest);
 
-	List<Garden> findAllByMemberId(Long memberId);
+	List<Garden> findAllByMember(Member member);
 
-	Long countByMemberId(Long memberId);
-	@Query("SELECT p FROM Pot p WHERE (p.garden) = :garden")
-	List<Pot> findPotByGardenId(@Param("garden") Garden garden);
+	Long countByMember(Member member);
 
-	@Modifying
-	@Query("DELETE FROM Garden g WHERE g = :garden")
-	void deleteGardenAndPots(@Param("garden") Garden garden);
+	void deleteGardenById(Long GardenId);
 
-	Garden findByMemberIdAndId(Long memberId, Long gardenId);
+	Garden findByMemberAndId(Member member, Long gardenId);
 
 }

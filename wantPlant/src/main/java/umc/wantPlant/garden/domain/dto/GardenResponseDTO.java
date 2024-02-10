@@ -38,11 +38,11 @@ public class GardenResponseDTO {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GardenResultDTO {
+	public static class GardenGetResultDTO {
 		Long gardenId;
 		String name;
 		String description;
-		String gardenCategory;
+		GardenCategories gardenCategory;
 		List<PotResponseDTO.PotDTO> potList;
 	}
 
@@ -50,15 +50,15 @@ public class GardenResponseDTO {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GardenResultList {
-		Long totalElements;
-		List<GardenResultDTO> gardens;
+	public static class GardenGetResultListDTO {
+		int totalElements;
+		List<GardenGetResultDTO> gardens;
 	}
 	@Builder
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GardenSize {
+	public static class GardenSizeResultDTO {
 		Long totalElements;
 	}
 
@@ -67,8 +67,8 @@ public class GardenResponseDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class GardenListDTO {
-		List<GardenResultDTO> gardenList;
+	public static class GardenGetResultPageDTO {
+		List<GardenGetResultDTO> gardenList;
 
 		Integer listSize;
 
