@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 @SpringBootApplication
 public class WantPlantApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(WantPlantApplication.class, args);
 	}

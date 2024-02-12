@@ -7,7 +7,7 @@ public enum PotType {
     ROSEMARY, //로즈마리
     BASIL, //바질
     TOMATO, //토마토
-    GREEN_ONION, //대파
+    GREENONION, //대파
     LETTUCE, //상추
     LAVENDER, //라벤더
     GERANIUM, //제라늄

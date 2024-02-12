@@ -18,13 +18,8 @@ import umc.wantPlant.tag.domain.Tag;
 public interface GardenRepository extends JpaRepository<Garden, Long> {
 	Page<Garden> findAllGardensByMember(Member member,PageRequest pageRequest);
 	Page<Garden> findByMemberAndCategory(Member member,GardenCategories category, PageRequest pageRequest);
-
 	List<Garden> findAllByMember(Member member);
-
 	Long countByMember(Member member);
-
 	void deleteGardenById(Long GardenId);
-
 	Garden findByMemberAndId(Member member, Long gardenId);
-
 }

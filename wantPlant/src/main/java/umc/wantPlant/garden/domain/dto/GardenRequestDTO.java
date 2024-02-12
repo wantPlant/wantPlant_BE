@@ -10,7 +10,6 @@ import lombok.Getter;
 import umc.wantPlant.garden.domain.enums.GardenCategories;
 
 public class GardenRequestDTO {
-
 	@Getter
 	@Builder
 	public static class GardenCreatRequestDTO {
