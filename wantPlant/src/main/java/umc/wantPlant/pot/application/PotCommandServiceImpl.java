@@ -46,7 +46,7 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Transactional
     public Pot createPot(PotRequestDTO.PostPotDTO request) {
         PotType potType = PotType.getRandom();
-        String keyName = "pot/"+potType.name().toLowerCase()+"-"+0;
+        String keyName = "pot/"+potType.name().toLowerCase()+"-"+0+".png";
         String potImgUrl = "";
         potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
 
