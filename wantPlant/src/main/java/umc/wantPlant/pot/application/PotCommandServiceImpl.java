@@ -68,7 +68,7 @@ public class PotCommandServiceImpl implements PotCommandService{
     @Override //앱용
     public Pot createPotGoalsTodos(PotRequestDTO.PostPotGoalTodoDTO request) {
         PotType potType = PotType.getRandom();
-        String keyName = "pot/"+potType.name().toLowerCase()+"-"+0;
+        String keyName = "pot/"+potType.name().toLowerCase()+"-"+0+".png";
         String potImgUrl = "";
         potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
 
@@ -109,12 +109,12 @@ public class PotCommandServiceImpl implements PotCommandService{
         pot.updatePotProceed(todo.getIsComplete());
 
         //url update
-        String keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0;;
+        String keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0+".png";;
         String potImgUrl = "";
         switch (pot.getProceed()/15){
-            case 0 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0;
-            case 1 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+1;
-            case 2 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+2;
+            case 0 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0+".png";
+            case 1 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+1+".png";
+            case 2 -> keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+2+".png";
         }
         potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
         pot.setPotImgUrl(potImgUrl);
@@ -124,7 +124,7 @@ public class PotCommandServiceImpl implements PotCommandService{
             completedPotCommandService.saveCompletedPotFromPot(pot);
             //0으로 초기화 - 이미지도 변경
             pot.setProceed(0);
-            keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0;
+            keyName = "pot/"+pot.getPotType().toString().toLowerCase()+"-"+0+".png";
             potImgUrl = amazonS3.getUrl(awsConfig.getBucketName(), keyName).toString();
             pot.setPotImgUrl(potImgUrl);
         }
