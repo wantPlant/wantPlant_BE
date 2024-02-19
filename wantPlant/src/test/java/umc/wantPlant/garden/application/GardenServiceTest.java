@@ -1,5 +1,6 @@
 package umc.wantPlant.garden.application;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static umc.wantPlant.garden.domain.enums.GardenCategories.*;
 
@@ -14,16 +15,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.transaction.annotation.Transactional;
 
-import io.jsonwebtoken.lang.Assert;
 import umc.wantPlant.garden.domain.Garden;
+import umc.wantPlant.garden.domain.dto.GardenRequestDTO;
+import umc.wantPlant.garden.domain.dto.GardenResponseDTO;
 import umc.wantPlant.garden.repository.GardenRepository;
 import umc.wantPlant.member.domain.Member;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class GardenServiceTest {
 	@InjectMocks
 	private GardenQueryServiceImpl gardenQueryService;
@@ -37,21 +36,30 @@ public class GardenServiceTest {
 	public void addGarden() {
 		//given
 		Member member = createMemberEntity();
-		Garden garden = createGardenEntity(member);
 
-		Long fakeGardenId = 0L;
-		ReflectionTestUtils.setField(garden, "id", fakeGardenId);
+		GardenRequestDTO.GardenCreatRequestDTO requestDTO = GardenRequestDTO.GardenCreatRequestDTO.builder()
+			.name("testGarden")
+			.description("testGarden")
+			.category(EXERCISE)
+			.build();
 
-		//mocking
-		given(gardenRepository.save(any())).willReturn(garden);
-		given(gardenRepository.findById(fakeGardenId)).willReturn(Optional.ofNullable(garden));
+		Garden gardenToSave = createGardenEntity(member);
+		when(gardenRepository.save(any(Garden.class))).thenReturn(gardenToSave);
 
-		//when
-		gardenRepository.save(garden);
 
-		//then
-		Garden saveGarden = gardenRepository.findById(0L).get();
-		Assertions.assertThat(garden).isEqualTo(saveGarden);
+		// When
+		GardenResponseDTO.GardenCreatResultDTO resultDTO = gardenCommandService.toCreatGarden(member, requestDTO);
+
+		// Then
+		assertNotNull(gardenToSave);
+		assertNotNull(resultDTO);
+		assertEquals(gardenToSave.getId(), resultDTO.getGardenId());
+		assertEquals(requestDTO.getName(), resultDTO.getName());
+		assertEquals(requestDTO.getDescription(), resultDTO.getDescription());
+		assertEquals(requestDTO.getCategory(), resultDTO.getGardenCategory());
+
+		// Verify that the save method was called with the correct arguments
+		verify(gardenRepository, times(1)).save(any(Garden.class));
 	}
 
 	@Test
@@ -80,7 +88,7 @@ public class GardenServiceTest {
 
 	private Member createMemberEntity() {
 		return Member.builder()
-			.id(99999L)
+			.id(1L)
 			.nickname("test")
 			.email("test@test.com")
 			.profileImage("test.com")
@@ -89,6 +97,7 @@ public class GardenServiceTest {
 
 	private Garden createGardenEntity(Member member) {
 		return Garden.builder()
+			.id(1L)
 			.name("testGarden")
 			.description("testGarden")
 			.category(EXERCISE)
