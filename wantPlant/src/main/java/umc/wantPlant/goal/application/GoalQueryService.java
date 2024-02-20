@@ -14,5 +14,5 @@ public interface GoalQueryService {
     public GoalResponseDTO.GetGoalsTodosByDateAndPotResultDTO getGoalsTodosPerPotAndDate(LocalDate date, Long potId);
     public List<Goal> findAllByPot(Pot pot);
     public boolean existGoalById(Long goalId);
-    public Optional<Goal> getGoalById(Long goalId);
+    public Goal getGoalById(Long goalId);
 }

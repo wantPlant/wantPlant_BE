@@ -2,6 +2,8 @@ package umc.wantPlant.goal.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import umc.wantPlant.apipayload.code.status.ErrorStatus;
+import umc.wantPlant.apipayload.exceptions.handler.GoalHandler;
 import umc.wantPlant.garden.domain.Garden;
 import umc.wantPlant.goal.domain.Goal;
 import umc.wantPlant.goal.domain.dto.GoalResponseDTO;
@@ -78,6 +80,7 @@ public class GoalQueryServiceImpl implements GoalQueryService {
         return goalRepository.existsById(goalId);
     }
     @Override
-    public Optional<Goal> getGoalById(Long goalId){return goalRepository.findById(goalId);}
+    public Goal getGoalById(Long goalId){return goalRepository.findById(goalId).orElseThrow(() -> new GoalHandler(ErrorStatus.GOAL_NOT_FOUND));}
+
 
 }

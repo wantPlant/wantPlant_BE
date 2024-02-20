@@ -47,26 +47,6 @@ public class TodoService {
         this.potCommandService = potCommandService;
     }
 
-    public Todo addTodo(TodoRequestDTO.TodoCreateDTO createDTO){
-
-        Goal goal = goalQueryService.getGoalById(createDTO.getGoalID()).orElseThrow(
-                ()->new GardenHandler(ErrorStatus.GARDEN_NOT_FOUND)
-        );
-        String title = createDTO.getTitle();
-        LocalDate date = createDTO.getDate();
-        LocalTime time = createDTO.getTime();
-        Boolean isComplete = false;
-        LocalDateTime startAt = LocalDateTime.of(date, time);
-
-        return todoRepository.save(Todo.builder()
-                .title(title)
-                .date(date)
-                .time(time)
-                .isComplete(isComplete)
-                .goal(goal)
-                .startAt(startAt)
-                .build());
-    }
     public TodoResponseDTO.TodoListDTO getTodos() {
         List<Todo> todos = todoRepository.findAll();
         List<TodoResponseDTO.TodoResultDTO> todoList = todos.stream()
@@ -149,6 +129,24 @@ public class TodoService {
         todoRepository.delete(todo);
     }
 
+    public Todo addTodo(TodoRequestDTO.TodoCreateDTO createDTO){
+
+        Goal goal = goalQueryService.getGoalById(createDTO.getGoalID());
+        String title = createDTO.getTitle();
+        LocalDate date = createDTO.getDate();
+        LocalTime time = createDTO.getTime();
+        Boolean isComplete = false;
+        LocalDateTime startAt = LocalDateTime.of(date, time);
+
+        return todoRepository.save(Todo.builder()
+                .title(title)
+                .date(date)
+                .time(time)
+                .isComplete(isComplete)
+                .goal(goal)
+                .startAt(startAt)
+                .build());
+    }
 
     //goalCommandService에서 todo생성할 때 사용
     @Transactional
