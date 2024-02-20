@@ -39,7 +39,7 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 
 		page = page == 0 ? 0 : page - 1;
 
-		return gardenRepository.findAllGardensByMember(member, PageRequest.of(page, 5));
+		return gardenRepository.findAllGardensByMember(member, PageRequest.of(page, 3));
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class GardenQueryServiceImpl implements GardenQueryService {
 		page = page == 0 ? 0 : page - 1;
 
 		return gardenRepository.findByMemberAndCategory(member, gardenCategories,
-			PageRequest.of(page, 5));
+			PageRequest.of(page, 3));
 	}
 
 	@Override
