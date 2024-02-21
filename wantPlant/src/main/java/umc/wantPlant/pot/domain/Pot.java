@@ -53,7 +53,7 @@ public class Pot {
     public void updatePotProceed(boolean todoIsComplete){
         if(todoIsComplete){
             this.proceed +=1;
-        }else{
+        }else if(proceed > 0){//proceed : non-negative
             this.proceed -=1;
         }
     }
